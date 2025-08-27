@@ -6,6 +6,7 @@
     <title>Marcella Lisboa - Marmita de Sucesso</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -40,8 +41,8 @@
 
     <main class="container mx-auto px-6 py-8 md:py-12 relative">
 
-        <section class="text-center mb-12 md:mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Seu Painel de Lançamento</h2>
+        <section class="text-center mb-12 md:mb-16 relative">
+            <h2 id="bonus-message" class="text-3xl md:text-4xl font-bold mb-4 inline-block relative z-20">Parabéns pela compra, faça bom proveito do seu bônus</h2>
             <p class="text-lg text-stone-600 max-w-3xl mx-auto">Transforme seu plano em ação. Use esta ferramenta interativa para planejar, calcular e lançar seu negócio de marmitas fitness.</p>
         </section>
 
@@ -299,7 +300,7 @@
                 description: 'Uma sopa cremosa e nutritiva, ideal para dias mais frios. Pode ser congelada facilmente.',
                 ingredients: ['500g de mandioquinha picada', '250g de frango desfiado', '1 cebola picada', '2 dentes de alho', 'Cheiro verde', 'Sal e azeite'],
                 prep: [
-                    '1. Em uma panela, refogue o alho e a cebola no azeite.',
+                    '1. Em uma panela, aqueça o azeite e refogue o alho e a cebola.',
                     '2. Adicione a mandioquinha e refogue mais um pouco.',
                     '3. Cubra com água e cozinhe até a mandioquinha ficar bem macia.',
                     '4. Bata tudo no liquidificador até virar um creme. Volte para a panela, adicione o frango desfiado e acerte o sal. Finalize com cheiro verde.'
@@ -608,7 +609,7 @@
                 description: 'Um molho agridoce que deixa o frango com um sabor incrível.',
                 ingredients: ['4 filés de frango', '2 colheres de sopa de mostarda', '1 colher de sopa de mel', 'Sal e pimenta'],
                 prep: [
-                    '1. Em uma tigela, misture a mostarda, o mel, sal e pimenta para fazer o molho.',
+                    '1. Em uma tigela, misture a mostarda, o mel e a pimenta para fazer o molho.',
                     '2. Grelhe os filés de frango e, quando estiverem quase prontos, cubra com o molho e cozinhe por mais 2 minutos.'
                 ]
             },
@@ -889,10 +890,10 @@
 
         recipes.forEach(recipe => {
             const card = document.createElement('div');
-            card.className = 'bg-white p-6 rounded-lg shadow recipe-card cursor-pointer';
+            card.className = 'bg-emerald-600 p-6 rounded-lg shadow recipe-card cursor-pointer';
             card.innerHTML = `
-                <h5 class="font-bold text-lg text-emerald-700">${recipe.title}</h5>
-                <p class="text-stone-600 mt-2">${recipe.description}</p>
+                <h5 class="font-bold text-lg text-white">${recipe.title}</h5>
+                <p class="text-white mt-2">${recipe.description}</p>
             `;
             card.addEventListener('click', () => showRecipeDetails(recipe));
             recipeGrid.appendChild(card);
@@ -1015,6 +1016,15 @@
         
         window.addEventListener('load', () => {
             updatePrice();
+            
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+            setTimeout(() => {
+                confetti.reset();
+            }, 5000);
         });
     </script>
 </body>
