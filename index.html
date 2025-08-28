@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals & Subtle Greens -->
-    <!-- Application Structure Plan: A task-oriented, single-page dashboard called "Painel de Lançamento". The structure is designed for non-linear exploration, allowing users to jump between planning, preparation, finance, and marketing. Key interactions include an interactive recipe viewer and a dynamic pricing calculator with a real-time chart. This structure was chosen to transform the static guide into a practical, hands-on tool, making the information more engaging and immediately applicable for an aspiring entrepreneur. -->
-    <!-- Visualization & Content Choices: Report Info: Financial planning -> Goal: Compare profitability -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Updates in real-time based on user input in a pricing calculator. Justification: Visually demonstrates the financial advantage of selling combos over single units, making a key business concept tangible. Report Info: Recipes -> Goal: Organize & Detail -> Method: Interactive HTML cards -> Interaction: On-click reveal of full recipe details. Justification: Keeps the main interface clean while providing easy access to detailed information. All other text-based info is presented in clickable cards for a clean, organized UI. -->
+    <!-- Application Structure Plan: O site foi redesenhado como um "Painel de Lançamento" com uma navegação mais intuitiva. Foi adicionada uma seção de Início/Boas-vindas para uma recepção mais clara. A seção de Receitas agora inclui filtros para facilitar a busca e exibe os detalhes em um modal para uma experiência de usuário mais fluida. Novas seções de bônus foram criadas para fornecer valor adicional e surpreender o usuário, transformando o site em um guia completo para o negócio. -->
+    <!-- Visualization & Content Choices: Report Info: Financial planning -> Goal: Compare profitability -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Updates in real-time based on user input in a pricing calculator. Justification: Visually demonstrates the financial advantage of selling combos over single units, making a key business concept tangible. Report Info: Recipes -> Goal: Organize & Detail -> Method: Interactive HTML cards & Modal -> Interaction: On-click filtering and modal reveal of full recipe details. Justification: This approach improves scannability and prevents navigation disruption. All other content is presented in a clean, hierarchical layout for maximum clarity. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
@@ -23,6 +23,7 @@
         .content-section.active { display: block; }
         .recipe-card { transition: transform 0.2s, box-shadow 0.2s; }
         .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .modal-content { max-height: 80vh; overflow-y: auto; }
     </style>
 </head>
 <body class="bg-white text-stone-800">
@@ -31,17 +32,19 @@
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-xl md:text-2xl font-bold text-emerald-600">Marcella Lisboa - Marmita de Sucesso</h1>
             <div class="hidden md:flex space-x-6">
+                <a href="#inicio" class="text-stone-600 hover:text-emerald-600 transition">Início</a>
                 <a href="#planejamento" class="text-stone-600 hover:text-emerald-600 transition">Planejamento</a>
                 <a href="#preparo" class="text-stone-600 hover:text-emerald-600 transition">Preparo</a>
                 <a href="#financas" class="text-stone-600 hover:text-emerald-600 transition">Finanças</a>
                 <a href="#marketing" class="text-stone-600 hover:text-emerald-600 transition">Marketing</a>
+                <a href="#bonus" class="text-stone-600 hover:text-emerald-600 transition">Bônus</a>
             </div>
         </nav>
     </header>
 
     <main class="container mx-auto px-6 py-8 md:py-12 relative">
 
-        <section class="text-center mb-12 md:mb-16 relative">
+        <section id="inicio" class="text-center mb-12 md:mb-16 relative">
             <h2 id="bonus-message" class="text-3xl md:text-4xl font-bold mb-4 inline-block relative z-20">Parabéns pela compra, faça bom proveito do seu bônus</h2>
             <p class="text-lg text-stone-600 max-w-3xl mx-auto">Transforme seu plano em ação. Use esta ferramenta interativa para planejar, calcular e lançar seu negócio de marmitas fitness.</p>
         </section>
@@ -81,20 +84,47 @@
             
             <h4 class="text-xl font-semibold mb-2 text-center">Cardápio Interativo</h4>
             <p class="text-sm text-center text-stone-600 mb-6">Clique em uma receita para ver os ingredientes e o modo de preparo detalhado.</p>
+            <div class="flex flex-wrap justify-center gap-2 mb-8">
+                <button onclick="filterRecipes('all')" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-full transition hover:bg-emerald-700">Todas</button>
+                <button onclick="filterRecipes('fit')" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-full transition hover:bg-emerald-700">Fit</button>
+                <button onclick="filterRecipes('tradicional')" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-full transition hover:bg-emerald-700">Tradicional</button>
+                <button onclick="filterRecipes('vegano')" class="bg-emerald-600 text-white font-bold py-2 px-4 rounded-full transition hover:bg-emerald-700">Vegano</button>
+            </div>
             <div class="grid md:grid-cols-3 gap-6" id="recipe-grid">
             </div>
             
-            <div id="recipe-details" class="mt-8 bg-white p-6 rounded-lg shadow" style="display: none;">
-            </div>
+            <dialog id="recipe-modal" class="p-8 bg-white rounded-lg shadow-2xl backdrop:bg-black backdrop:opacity-50 w-11/12 md:w-3/4 lg:w-1/2">
+                <div class="modal-content">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-stone-500 hover:text-stone-800 font-bold text-xl">X</button>
+                    <div id="modal-details"></div>
+                </div>
+            </dialog>
 
             <div class="mt-12 bg-emerald-50 p-6 rounded-lg shadow">
                 <h4 class="font-bold text-lg mb-4 text-emerald-600">💡 Ideias para Criar Receitas</h4>
-                <p class="text-stone-600 mb-4">Inspire-se para criar seu cardápio com estas sugestões e combinações:</p>
-                <ul class="list-disc list-inside space-y-2 text-stone-700">
-                    <li>**Combinações Básicas:** Proteína (frango, carne, peixe) + Carboidrato (arroz integral, batata doce) + Vegetal (brócolis, couve-flor, cenoura).</li>
-                    <li>**Marmitas Temáticas:** Crie um dia da semana para cada tema, como "Segunda sem carne", "Terça Mexicana" ou "Quarta de Massas Integrais".</li>
-                    <li>**Adaptações:** Transforme receitas clássicas em versões fit, como strogonoff com creme de leite light, lasanha de berinjela ou escondidinho de batata doce.</li>
-                    <li>**Receitas Sazonais:** Use ingredientes da estação para criar pratos frescos e econômicos, como saladas com frutas no verão.</li>
+                <p class="text-stone-600 mb-4">Transforme seu cardápio com inspiração e criatividade. Explore estas ideias organizadas por categoria:</p>
+                
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Por Categoria de Proteína</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Frango: Filé de frango assado com batatas, frango desfiado com purê, fricassê de frango light, frango xadrez fit.</li>
+                    <li>Carne Vermelha: Picadinho com legumes, carne de panela com mandioquinha, almôndegas ao sugo, carne de panela com batatas.</li>
+                    <li>Peixe: Salmão assado com brócolis, filé de tilápia grelhado com vegetais, atum com macarrão integral.</li>
+                    <li>Ovo: Omelete de forno, ovos mexidos com legumes, ovos cozidos com salada.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Combinações de Acompanhamentos</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Arroz integral, purê de batata doce, purê de aipim.</li>
+                    <li>Salada de lentilha, tabule, salada de grão de bico.</li>
+                    <li>Legumes cozidos no vapor (brócolis, cenoura, couve-flor).</li>
+                    <li>Couve refogada, vagem, pimentões.</li>
+                </ul>
+
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Receitas Temáticas</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Veganas: Quibe de abóbora, estrogonofe de legumes, arroz com lentilha.</li>
+                    <li>Sopas e Cremes: Creme de brócolis com ricota, sopa de lentilha com legumes, creme de abóbora com gengibre.</li>
+                    <li>Comidas de Conforto (versão saudável): Panqueca de frango, lasanha de abobrinha, tortinhas salgadas.</li>
                 </ul>
             </div>
         </section>
@@ -160,13 +190,45 @@
              <div class="mt-12 bg-emerald-50 p-6 rounded-lg shadow">
                 <h4 class="font-bold text-lg mb-4 text-emerald-600">💡 Ideias Criativas de Marketing</h4>
                 <p class="text-stone-600 mb-4">Use estas sugestões para criar posts e conteúdo que engajem seu público:</p>
-                <ul class="list-disc list-inside space-y-2 text-stone-700">
-                    <li>**Posts Educativos:** Crie conteúdo sobre os benefícios de cada ingrediente, como o ômega-3 do salmão ou a fibra do arroz integral.</li>
-                    <li>**Bastidores:** Faça um vídeo mostrando a sua cozinha limpa, os ingredientes frescos e o processo de preparo para gerar confiança.</li>
-                    <li>**Série de Dicas:** Compartilhe dicas rápidas sobre como armazenar, descongelar ou aquecer as marmitas.</li>
-                    <li>**Depoimentos de Clientes:** Peça a clientes satisfeitos para compartilharem suas experiências. Use prints de conversas ou vídeos curtos.</li>
-                    <li>**Interação:** Faça enquetes no Instagram Stories perguntando qual a próxima receita do cardápio ou qual a proteína favorita dos seus clientes.</li>
+                
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Conteúdo para Redes Sociais</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Receita da Semana: Destaque uma marmita do seu cardápio com foto de alta qualidade e uma descrição apetitosa.</li>
+                    <li>Bastidores: Mostre o processo de preparo, a organização da cozinha e os ingredientes frescos para gerar confiança e transparência.</li>
+                    <li>Dicas de Saúde: Compartilhe informações curtas e úteis sobre nutrição, benefícios de ingredientes específicos ou como manter uma alimentação equilibrada.</li>
+                    <li>Enquetes e Interação: Crie enquetes no Instagram Stories perguntando "Qual sua proteína favorita?" ou "Qual receita você gostaria de ver no cardápio?".</li>
                 </ul>
+
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Estratégias de Engajamento</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Depoimentos: Peça a clientes satisfeitos para enviarem fotos ou vídeos das suas marmitas e compartilhe nas redes sociais (com a permissão deles).</li>
+                    <li>Perguntas e Respostas: Abra uma caixa de perguntas nos Stories para responder dúvidas sobre seu negócio, cardápio ou ingredientes.</li>
+                </ul>
+                
+                <h5 class="font-semibold mt-4 mb-2 text-emerald-700">➤ Ações de Venda</h5>
+                <ul class="list-disc list-inside space-y-1 text-stone-700 ml-4">
+                    <li>Combos Promocionais: Anuncie os combos semanais ou mensais com fotos atrativas e um bom preço para incentivar compras maiores.</li>
+                    <li>Promoção Relâmpago: Ofereça um desconto ou um brinde extra (como um suco detox) para os primeiros 10 pedidos do dia.</li>
+                    <li>Cartão Fidelidade: Explique como seu cartão funciona e os benefícios de ser um cliente fiel.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="bonus" class="mb-12 md:mb-16">
+            <h3 class="text-2xl font-bold mb-8 text-center">Módulo 5: Bônus de Ouro</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="font-bold text-lg mb-2 text-emerald-600">❄️ Técnicas de Congelamento</h4>
+                    <p class="text-stone-600">Evite que suas marmitas percam sabor e textura. Congele rapidamente em embalagens adequadas e etiquete com a data.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="font-bold text-lg mb-2 text-emerald-600">🛒 Gestão de Estoque Inteligente</h4>
+                    <p class="text-stone-600">Compre ingredientes da estação para economizar. Planeje seu cardápio semanalmente para evitar desperdícios e otimizar as compras.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="font-bold text-lg mb-2 text-emerald-600">🍶 Receitas de Molhos Especiais</h4>
+                    <p class="text-stone-600">Molhos simples e saborosos para elevar o nível das suas marmitas. Crie uma linha de molhos caseiros.</p>
+                </div>
             </div>
         </section>
     </main>
@@ -182,7 +244,8 @@
         const recipes = [
             {
                 id: 'frango',
-                title: 'Frango Grelhado com Purê de Batata Doce (Fit)',
+                title: 'Frango Grelhado com Purê de Batata Doce',
+                category: 'fit',
                 description: 'Um clássico fitness, rico em proteína e carboidratos de baixo índice glicêmico.',
                 ingredients: ['500g de peito de frango', '1kg de batata doce', 'Azeite, sal e pimenta-do-reino a gosto', 'Especiarias para o frango (páprica, açafrão)'],
                 prep: [
@@ -193,7 +256,8 @@
             },
             {
                 id: 'carne',
-                title: 'Picadinho de Carne com Abóbora (Fit)',
+                title: 'Picadinho de Carne com Abóbora',
+                category: 'fit',
                 description: 'Uma receita simples e reconfortante, ideal para um prato principal saboroso e nutritivo.',
                 ingredients: ['500g de patinho picado em cubos', '300g de abóbora', '1 cebola picada', '2 dentes de alho amassados', 'Azeite, sal e temperos a gosto'],
                 prep: [
@@ -204,7 +268,8 @@
             },
             {
                 id: 'salmao',
-                title: 'Salmão Assado com Legumes Coloridos (Fit)',
+                title: 'Salmão Assado com Legumes Coloridos',
+                category: 'fit',
                 description: 'Uma refeição elegante e leve, rica em ômega-3 e vitaminas. Perfeita para um almoço ou jantar nutritivo.',
                 ingredients: ['2 a 3 filés de salmão', '1 abobrinha média em rodelas', '1 cenoura em palitos', 'Brócolis em floretes', 'Azeite, suco de limão e sal a gosto'],
                 prep: [
@@ -215,7 +280,8 @@
             },
             {
                 id: 'frango-desfiado',
-                title: 'Frango Desfiado Cremoso (Fit)',
+                title: 'Frango Desfiado Cremoso',
+                category: 'fit',
                 description: 'Versátil, econômico e delicioso. Pode ser usado como recheio ou como prato principal.',
                 ingredients: ['500g de peito de frango', '1 pote de requeijão light (200g)', '1 lata de milho verde', 'Cheiro verde a gosto', 'Sal e pimenta do reino'],
                 prep: [
@@ -227,7 +293,8 @@
             },
             {
                 id: 'lasanha',
-                title: 'Lasanha de Abobrinha à Bolonhesa (Fit)',
+                title: 'Lasanha de Abobrinha à Bolonhesa',
+                category: 'fit',
                 description: 'Uma versão mais leve da lasanha tradicional, substituindo a massa por fatias finas de abobrinha.',
                 ingredients: ['2 abobrinhas grandes', '500g de carne moída (patinho)', '1 cebola picada', '1 molho de tomate caseiro ou sem conservantes', 'Queijo mussarela fatiado'],
                 prep: [
@@ -239,7 +306,8 @@
             },
             {
                 id: 'tilapia',
-                title: 'Filé de Tilápia Grelhado com Mix de Vegetais (Fit)',
+                title: 'Filé de Tilápia Grelhado com Mix de Vegetais',
+                category: 'fit',
                 description: 'Uma opção rápida e saudável para a sua marmita, com sabor fresco e leve.',
                 ingredients: ['4 filés de tilápia', '1 xícara de brócolis cozido', '1 xícara de couve-flor cozida', '1 xícara de cenoura em cubos', 'Azeite, alho e sal a gosto'],
                 prep: [
@@ -251,7 +319,8 @@
             },
             {
                 id: 'arroz-carne',
-                title: 'Arroz com Carne e Legumes (Tradicional)',
+                title: 'Arroz com Carne e Legumes',
+                category: 'tradicional',
                 description: 'Um prato completo e econômico que pode ser feito em grande quantidade.',
                 ingredients: ['500g de alcatra em cubos', '2 xícaras de arroz', '1 cebola picada', '1 cenoura em cubos', '1 xícara de ervilhas frescas', 'Sal e pimenta a gosto'],
                 prep: [
@@ -262,7 +331,8 @@
             },
             {
                 id: 'salada-pote',
-                title: 'Salada de Frango no Pote (Fit)',
+                title: 'Salada de Frango no Pote',
+                category: 'fit',
                 description: 'Prática e fácil de montar, ideal para um almoço leve e refrescante.',
                 ingredients: ['200g de frango desfiado e temperado', 'Folhas de alface e rúcula', 'Tomate cereja cortado ao meio', 'Cenoura ralada', 'Milho', 'Molho a base de iogurte e limão'],
                 prep: [
@@ -274,7 +344,8 @@
             },
             {
                 id: 'panqueca',
-                title: 'Panqueca de Frango com Molho (Tradicional)',
+                title: 'Panqueca de Frango com Molho',
+                category: 'tradicional',
                 description: 'Uma opção deliciosa e fácil de variar o cardápio, que agrada a todos.',
                 ingredients: ['Massa de panqueca (aveia ou tradicional)', '300g de frango desfiado', '1 molho de tomate caseiro', 'Queijo cottage ou catupiry para o recheio', 'Sal e orégano'],
                 prep: [
@@ -285,7 +356,8 @@
             },
             {
                 id: 'omelete',
-                title: 'Omelete de Forno com Vegetais (Fit)',
+                title: 'Omelete de Forno com Vegetais',
+                category: 'fit',
                 description: 'Perfeito para um café da manhã reforçado ou um jantar leve. Rende várias porções.',
                 ingredients: ['6 ovos', '1/2 xícara de leite', '1/2 cebola picada', '1/2 pimentão em cubos', 'Espinafre picado', 'Sal e pimenta a gosto'],
                 prep: [
@@ -296,7 +368,8 @@
             },
             {
                 id: 'sopa',
-                title: 'Sopa Creme de Mandioquinha com Frango (Fit)',
+                title: 'Sopa Creme de Mandioquinha com Frango',
+                category: 'fit',
                 description: 'Uma sopa cremosa e nutritiva, ideal para dias mais frios. Pode ser congelada facilmente.',
                 ingredients: ['500g de mandioquinha picada', '250g de frango desfiado', '1 cebola picada', '2 dentes de alho', 'Cheiro verde', 'Sal e azeite'],
                 prep: [
@@ -308,7 +381,8 @@
             },
             {
                 id: 'bolinho-carne',
-                title: 'Bolinho de Carne Assado com Legumes (Tradicional)',
+                title: 'Bolinho de Carne Assado com Legumes',
+                category: 'tradicional',
                 description: 'Uma forma diferente de usar a carne moída, em porções individuais e práticas.',
                 ingredients: ['500g de carne moída', '1 ovo', '1/2 xícara de farinha de rosca', 'Cebola e alho picados', 'Sal e especiarias a gosto'],
                 prep: [
@@ -319,7 +393,8 @@
             },
             {
                 id: 'feijao-tropeiro',
-                title: 'Feijão Tropeiro (Tradicional)',
+                title: 'Feijão Tropeiro',
+                category: 'tradicional',
                 description: 'Uma releitura leve do clássico, com bastante sabor.',
                 ingredients: ['2 xícaras de feijão cozido', '100g de bacon picado', '100g de linguiça picada', '1/2 maço de couve picada', '1 cebola', '3 dentes de alho', 'Ovo cozido picado', 'Farinha de mandioca'],
                 prep: [
@@ -330,7 +405,8 @@
             },
             {
                 id: 'frango-xadrez',
-                title: 'Frango Xadrez Light (Fit)',
+                title: 'Frango Xadrez Light',
+                category: 'fit',
                 description: 'Um prato com sabor oriental e cores vibrantes, mas com pouca gordura.',
                 ingredients: ['500g de peito de frango em cubos', '1 pimentão vermelho', '1 pimentão amarelo', '1 cebola', 'Molho shoyu light', 'Amido de milho', 'Água', 'Gengibre ralado'],
                 prep: [
@@ -341,7 +417,8 @@
             },
             {
                 id: 'bolinho-frango-batata',
-                title: 'Bolinho de Frango e Batata Doce (Fit)',
+                title: 'Bolinho de Frango e Batata Doce',
+                category: 'fit',
                 description: 'Práticos para comer em qualquer lugar, esses bolinhos são uma excelente fonte de energia.',
                 ingredients: ['500g de peito de frango cozido e desfiado', '1 batata doce média cozida e amassada', 'Cheiro verde', 'Sal e temperos a gosto', 'Farinha de aveia'],
                 prep: [
@@ -352,7 +429,8 @@
             },
             {
                 id: 'arroz-lentilha',
-                title: 'Arroz com Lentilha e Vegetais (Fit)',
+                title: 'Arroz com Lentilha e Vegetais',
+                category: 'fit',
                 description: 'Uma refeição vegana e completa, cheia de sabor e nutrientes.',
                 ingredients: ['1 xícara de arroz integral', '1 xícara de lentilha', '1/2 cebola picada', 'Alho', 'Cenoura e abobrinha em cubos'],
                 prep: [
@@ -363,7 +441,8 @@
             },
             {
                 id: 'tilapia-molho',
-                title: 'Tilápia ao Molho de Tomate (Fit)',
+                title: 'Tilápia ao Molho de Tomate',
+                category: 'fit',
                 description: 'Uma forma fácil de preparar peixe, com molho caseiro e saboroso.',
                 ingredients: ['4 filés de tilápia', '1 molho de tomate caseiro', 'Cebola e alho', 'Azeite', 'Manjericão fresco'],
                 prep: [
@@ -374,7 +453,8 @@
             },
             {
                 id: 'crepioca',
-                title: 'Crepioca Recheada com Queijo e Tomate (Fit)',
+                title: 'Crepioca Recheada com Queijo e Tomate',
+                category: 'fit',
                 description: 'Rápida de fazer e ótima para variar o lanche da tarde ou uma refeição leve.',
                 ingredients: ['2 ovos', '2 colheres de sopa de goma de tapioca', 'Sal', 'Queijo minas ou cottage', 'Tomate cereja'],
                 prep: [
@@ -385,7 +465,8 @@
             },
             {
                 id: 'risoto-couveflor',
-                title: 'Risoto de Couve-Flor (Fit)',
+                title: 'Risoto de Couve-Flor',
+                category: 'fit',
                 description: 'Uma alternativa com baixo carboidrato para o risoto tradicional, surpreendentemente saborosa.',
                 ingredients: ['1 couve-flor média ralada', '250g de frango desfiado', '1/2 cebola', 'Azeite', 'Cheiro verde', 'Queijo parmesão ralado'],
                 prep: [
@@ -396,7 +477,8 @@
             },
             {
                 id: 'carne-legumes',
-                title: 'Carne de Panela com Legumes (Tradicional)',
+                title: 'Carne de Panela com Legumes',
+                category: 'tradicional',
                 description: 'Um clássico do almoço de domingo, agora na sua marmita. A carne fica super macia.',
                 ingredients: ['500g de carne de panela em cubos', '2 batatas em cubos', '1 cenoura em rodelas', '1 cebola', 'Tomate', 'Molho de tomate', 'Sal e louro'],
                 prep: [
@@ -407,7 +489,8 @@
             },
             {
                 id: 'macarrao-integral',
-                title: 'Macarrão Integral com Brócolis e Frango (Fit)',
+                title: 'Macarrão Integral com Brócolis e Frango',
+                category: 'fit',
                 description: 'Rápido, fácil e delicioso, perfeito para uma refeição prática e balanceada.',
                 ingredients: ['250g de macarrão integral', '300g de frango em cubos', '1 brócolis médio', '2 dentes de alho', 'Azeite, sal e pimenta'],
                 prep: [
@@ -418,7 +501,8 @@
             },
             {
                 id: 'estrogonofe-legumes',
-                title: 'Estrogonofe de Legumes (Vegano)',
+                title: 'Estrogonofe de Legumes',
+                category: 'vegano',
                 description: 'Uma versão vegana do estrogonofe, com a textura e o sabor dos vegetais.',
                 ingredients: ['1 xícara de cogumelos fatiados', '1 abobrinha em cubos', '1 cenoura em cubos', '1 cebola', 'Molho de tomate', 'Leite de coco light'],
                 prep: [
@@ -429,7 +513,8 @@
             },
             {
                 id: 'creme-brocolis',
-                title: 'Creme de Brócolis com Ricota (Fit)',
+                title: 'Creme de Brócolis com Ricota',
+                category: 'fit',
                 description: 'Um creme leve, nutritivo e super rápido de preparar.',
                 ingredients: ['1 brócolis grande', '2 dentes de alho', '1 cebola', '200g de ricota fresca', 'Sal e noz-moscada'],
                 prep: [
@@ -440,7 +525,8 @@
             },
             {
                 id: 'sopa-lentilha',
-                title: 'Sopa de Lentilha e Vegetais (Tradicional)',
+                title: 'Sopa de Lentilha e Vegetais',
+                category: 'tradicional',
                 description: 'Uma sopa completa, perfeita para o inverno e fácil de porcionar em marmitas.',
                 ingredients: ['1 xícara de lentilha', '1 cebola picada', '2 cenouras em rodelas', '2 talos de aipo', 'Tomate pelado', 'Louro'],
                 prep: [
@@ -451,7 +537,8 @@
             },
             {
                 id: 'frango-coco',
-                title: 'Frango com Curry e Leite de Coco (Tradicional)',
+                title: 'Frango com Curry e Leite de Coco',
+                category: 'tradicional',
                 description: 'Um prato exótico e muito saboroso que foge do comum.',
                 ingredients: ['500g de frango em cubos', '1 cebola picada', '1 colher de sopa de curry', '1 vidro de leite de coco', 'Sal'],
                 prep: [
@@ -462,7 +549,8 @@
             },
             {
                 id: 'carne-gengibre',
-                title: 'Carne com Gengibre e Brócolis (Fit)',
+                title: 'Carne com Gengibre e Brócolis',
+                category: 'fit',
                 description: 'Uma inspiração oriental para um prato rápido e nutritivo.',
                 ingredients: ['500g de carne em tiras', '1 brócolis', '1 pedaço de gengibre ralado', 'Molho shoyu light', 'Óleo de gergelim'],
                 prep: [
@@ -473,7 +561,8 @@
             },
             {
                 id: 'macarrao-atum',
-                title: 'Macarrão com Atum e Legumes (Fit)',
+                title: 'Macarrão com Atum e Legumes',
+                category: 'fit',
                 description: 'Uma receita super rápida, perfeita para um almoço de última hora.',
                 ingredients: ['250g de macarrão integral', '1 lata de atum em água', 'Milho e ervilha', 'Tomate picado', 'Azeite, sal e orégano'],
                 prep: [
@@ -484,7 +573,8 @@
             },
             {
                 id: 'quinoa-frango',
-                title: 'Quinoa com Frango e Vegetais (Fit)',
+                title: 'Quinoa com Frango e Vegetais',
+                category: 'fit',
                 description: 'Uma marmita completa e cheia de fibras, ideal para quem quer variar o cardápio.',
                 ingredients: ['1 xícara de quinoa', '300g de frango desfiado', 'Abobrinha em cubos', 'Cenoura em cubos', 'Pimentão'],
                 prep: [
@@ -495,7 +585,8 @@
             },
             {
                 id: 'lentilha-vermelha',
-                title: 'Curry de Lentilha Vermelha (Vegano)',
+                title: 'Curry de Lentilha Vermelha',
+                category: 'vegano',
                 description: 'Um curry vegano, super cremoso e com sabor único.',
                 ingredients: ['1 xícara de lentilha vermelha', '1 cebola picada', '2 dentes de alho', '1 colher de sopa de curry', 'Leite de coco light'],
                 prep: [
@@ -506,7 +597,8 @@
             },
             {
                 id: 'ovos-cozidos',
-                title: 'Marmita com Ovos Cozidos e Batata Doce (Fit)',
+                title: 'Marmita com Ovos Cozidos e Batata Doce',
+                category: 'fit',
                 description: 'Uma marmita simples e super proteica. Perfeita para um dia corrido.',
                 ingredients: ['2 a 3 ovos cozidos', '1 batata doce média', 'Brócolis', 'Tomate cereja', 'Azeite, sal e orégano'],
                 prep: [
@@ -517,7 +609,8 @@
             },
             {
                 id: 'frango-assado',
-                title: 'Frango Assado com Batatas e Alecrim (Tradicional)',
+                title: 'Frango Assado com Batatas e Alecrim',
+                category: 'tradicional',
                 description: 'Saboroso e prático. Uma ótima opção para preparar em grandes quantidades.',
                 ingredients: ['4 filés de frango', '3 batatas médias', '1 cebola em rodelas', 'Alecrim fresco', 'Azeite, sal e pimenta'],
                 prep: [
@@ -528,7 +621,8 @@
             },
             {
                 id: 'escondidinho-carne',
-                title: 'Escondidinho de Carne Seca e Aipim (Tradicional)',
+                title: 'Escondidinho de Carne Seca e Aipim',
+                category: 'tradicional',
                 description: 'O sabor da comida brasileira em uma marmita completa.',
                 ingredients: ['500g de carne seca cozida e desfiada', '1kg de aipim cozido e amassado', '1 cebola', '2 dentes de alho', 'Cheiro verde', 'Sal e pimenta'],
                 prep: [
@@ -539,7 +633,8 @@
             },
             {
                 id: 'arroz-vegetais',
-                title: 'Arroz Integral com Vegetais Coloridos (Fit)',
+                title: 'Arroz Integral com Vegetais Coloridos',
+                category: 'fit',
                 description: 'Uma marmita vegetariana e muito nutritiva, cheia de cores e sabor.',
                 ingredients: ['2 xícaras de arroz integral cozido', '1 cenoura picada', '1 pimentão em cubos', '1 brócolis picado', 'Milho e ervilha', 'Azeite, sal e páprica'],
                 prep: [
@@ -550,7 +645,8 @@
             },
             {
                 id: 'frango-limao',
-                title: 'Filé de Frango com Molho de Limão (Fit)',
+                title: 'Filé de Frango com Molho de Limão',
+                category: 'fit',
                 description: 'Uma opção leve e com um toque de acidez que agrada a maioria das pessoas.',
                 ingredients: ['4 filés de frango', 'Suco de 1 limão', '1 dente de alho', 'Azeite', 'Salsinha picada', 'Sal e pimenta'],
                 prep: [
@@ -561,7 +657,8 @@
             },
             {
                 id: 'atum-salada',
-                title: 'Salada de Grão de Bico com Atum (Fit)',
+                title: 'Salada de Grão de Bico com Atum',
+                category: 'fit',
                 description: 'Uma salada super completa, ideal para os dias mais quentes.',
                 ingredients: ['1 lata de grão de bico', '1 lata de atum em água', 'Cenoura em cubos', 'Tomate picado', 'Pepino em cubos', 'Azeite, limão e sal'],
                 prep: [
@@ -572,7 +669,8 @@
             },
             {
                 id: 'frango-legumes',
-                title: 'Frango com Legumes ao Vapor (Fit)',
+                title: 'Frango com Legumes ao Vapor',
+                category: 'fit',
                 description: 'Uma das marmitas mais saudáveis e fáceis de preparar.',
                 ingredients: ['300g de peito de frango em cubos', 'Brócolis', 'Couve-flor', 'Cenoura', 'Vagem', 'Sal, pimenta e azeite'],
                 prep: [
@@ -583,7 +681,8 @@
             },
             {
                 id: 'carne-molho-fungos',
-                title: 'Carne ao Molho de Funghi (Tradicional)',
+                title: 'Carne ao Molho de Funghi',
+                category: 'tradicional',
                 description: 'Um molho sofisticado, que transforma uma carne simples em um prato especial.',
                 ingredients: ['500g de carne em cubos', '20g de funghi secchi', '1 cebola', 'Creme de leite light', 'Sal e pimenta'],
                 prep: [
@@ -594,7 +693,8 @@
             },
             {
                 id: 'abobrinha-recheada',
-                title: 'Abobrinha Recheada com Carne (Fit)',
+                title: 'Abobrinha Recheada com Carne',
+                category: 'fit',
                 description: 'Uma opção com baixo carboidrato, mas muito saborosa e completa.',
                 ingredients: ['2 abobrinhas grandes', '300g de carne moída', 'Queijo mussarela', 'Molho de tomate', 'Sal e temperos'],
                 prep: [
@@ -605,7 +705,8 @@
             },
             {
                 id: 'frango-mostarda',
-                title: 'Frango com Molho de Mostarda e Mel (Tradicional)',
+                title: 'Frango com Molho de Mostarda e Mel',
+                category: 'tradicional',
                 description: 'Um molho agridoce que deixa o frango com um sabor incrível.',
                 ingredients: ['4 filés de frango', '2 colheres de sopa de mostarda', '1 colher de sopa de mel', 'Sal e pimenta'],
                 prep: [
@@ -615,7 +716,8 @@
             },
             {
                 id: 'quibe-abobora',
-                title: 'Quibe de Abóbora Recheado (Vegano)',
+                title: 'Quibe de Abóbora Recheado',
+                category: 'vegano',
                 description: 'Uma opção vegetariana e muito saborosa, que foge do tradicional.',
                 ingredients: ['500g de abóbora cozida', '1/2 xícara de trigo para quibe', 'Hortelã', 'Sal', 'Recheio de legumes ou ricota'],
                 prep: [
@@ -626,7 +728,8 @@
             },
             {
                 id: 'ovo-mexido',
-                title: 'Ovo Mexido com Vegetais (Fit)',
+                title: 'Ovo Mexido com Vegetais',
+                category: 'fit',
                 description: 'Rápido, fácil e versátil. Uma opção para qualquer refeição do dia.',
                 ingredients: ['3 ovos', 'Brócolis picado', 'Cenoura ralada', 'Tomate em cubos', 'Sal e pimenta'],
                 prep: [
@@ -637,7 +740,8 @@
             },
             {
                 id: 'pure-couveflor',
-                title: 'Purê de Couve-Flor com Frango Desfiado (Fit)',
+                title: 'Purê de Couve-Flor com Frango Desfiado',
+                category: 'fit',
                 description: 'Uma opção com baixo carboidrato para quem quer evitar batatas. Super cremoso!',
                 ingredients: ['1 couve-flor grande', '250g de frango desfiado', 'Leite de coco light', 'Queijo parmesão ralado', 'Sal e noz-moscada'],
                 prep: [
@@ -648,7 +752,8 @@
             },
             {
                 id: 'salada-feijao',
-                title: 'Salada de Feijão Fradinho com Vinagrete (Fit)',
+                title: 'Salada de Feijão Fradinho com Vinagrete',
+                category: 'fit',
                 description: 'Uma salada nutritiva, refrescante e cheia de proteínas vegetais.',
                 ingredients: ['2 xícaras de feijão fradinho cozido', '1 cebola roxa picada', 'Tomate picado', 'Pimentão em cubos', 'Salsinha e coentro', 'Vinagre, azeite e sal'],
                 prep: [
@@ -658,7 +763,8 @@
             },
             {
                 id: 'file-peixe-limao',
-                title: 'Filé de Peixe Simples com Limão e Ervas (Fit)',
+                title: 'Filé de Peixe Simples com Limão e Ervas',
+                category: 'fit',
                 description: 'Um prato rápido e muito saudável, perfeito para quem busca refeições leves.',
                 ingredients: ['4 filés de peixe branco', 'Suco de 1 limão', 'Ervas finas (alecrim, manjericão)', 'Azeite, sal e pimenta'],
                 prep: [
@@ -668,7 +774,8 @@
             },
             {
                 id: 'frango-recheado',
-                title: 'Peito de Frango Recheado com Queijo (Tradicional)',
+                title: 'Peito de Frango Recheado com Queijo',
+                category: 'tradicional',
                 description: 'Uma marmita que parece sofisticada, mas é fácil de fazer.',
                 ingredients: ['2 peitos de frango grandes', 'Queijo minas ou cottage', 'Manjericão fresco', 'Sal e pimenta'],
                 prep: [
@@ -679,7 +786,8 @@
             },
             {
                 id: 'lentilha-frango',
-                title: 'Lentilha Cozida com Frango Desfiado (Tradicional)',
+                title: 'Lentilha Cozida com Frango Desfiado',
+                category: 'tradicional',
                 description: 'Uma marmita completa e nutritiva, rica em proteína e fibra.',
                 ingredients: ['1 xícara de lentilha', '300g de frango desfiado', 'Cebola e alho', 'Cenoura em cubos', 'Sal e cheiro verde'],
                 prep: [
@@ -690,7 +798,8 @@
             },
             {
                 id: 'carne-legumes-assados',
-                title: 'Carne e Legumes Assados (Tradicional)',
+                title: 'Carne e Legumes Assados',
+                category: 'tradicional',
                 description: 'Um prato prático que suja pouca louça, perfeito para o dia a dia.',
                 ingredients: ['500g de carne em cubos', 'Batata doce em cubos', 'Cebola roxa em pétalas', 'Brócolis em floretes', 'Azeite, sal, alho e alecrim'],
                 prep: [
@@ -701,7 +810,8 @@
             },
             {
                 id: 'couve-flor-molho',
-                title: 'Couve-Flor Gratinada com Frango (Tradicional)',
+                title: 'Couve-Flor Gratinada com Frango',
+                category: 'tradicional',
                 description: 'Um prato cremoso e reconfortante, que pode ser feito em grandes quantidades.',
                 ingredients: ['1 couve-flor grande', '400g de frango desfiado', 'Molho branco light (feito com leite e amido de milho)', 'Queijo mussarela ralado'],
                 prep: [
@@ -712,7 +822,8 @@
             },
             {
                 id: 'arroz-lentilha-bolinho',
-                title: 'Bolinho de Arroz com Lentilha (Vegano)',
+                title: 'Bolinho de Arroz com Lentilha',
+                category: 'vegano',
                 description: 'Uma maneira criativa de usar sobras de arroz e lentilha. Delicioso e vegano.',
                 ingredients: ['2 xícaras de arroz cozido', '1 xícara de lentilha cozida', '1/2 cebola', 'Salsinha e cebolinha picada', 'Sal e pimenta'],
                 prep: [
@@ -723,7 +834,8 @@
             },
             {
                 id: 'sopa-cenoura',
-                title: 'Sopa Creme de Cenoura com Gengibre (Tradicional)',
+                title: 'Sopa Creme de Cenoura com Gengibre',
+                category: 'tradicional',
                 description: 'Uma sopa com um toque picante e muito nutritiva. Ótima para a imunidade.',
                 ingredients: ['500g de cenoura em cubos', '1 pedaço de gengibre ralado', '1 cebola', '2 dentes de alho', 'Azeite e sal'],
                 prep: [
@@ -734,7 +846,8 @@
             },
             {
                 id: 'frango-laranja',
-                title: 'Frango com Molho de Laranja (Tradicional)',
+                title: 'Frango com Molho de Laranja',
+                category: 'tradicional',
                 description: 'Um sabor agridoce que surpreende, perfeito para variar o cardápio da semana.',
                 ingredients: ['4 filés de frango', 'Suco de 2 laranjas', '1 colher de sopa de mel ou adoçante', 'Amido de milho', 'Sal e pimenta'],
                 prep: [
@@ -745,7 +858,8 @@
             },
             {
                 id: 'file-peixe-coco',
-                title: 'Filé de Peixe com Leite de Coco e Pimentão (Tradicional)',
+                title: 'Filé de Peixe com Leite de Coco e Pimentão',
+                category: 'tradicional',
                 description: 'Um prato com inspiração tailandesa, fácil e com sabor marcante.',
                 ingredients: ['4 filés de peixe', '1 pimentão vermelho', '1 cebola', '1 vidro de leite de coco', 'Sal, pimenta e cheiro verde'],
                 prep: [
@@ -755,7 +869,8 @@
             },
             {
                 id: 'tabule-frango',
-                title: 'Tabule com Frango Desfiado (Fit)',
+                title: 'Tabule com Frango Desfiado',
+                category: 'fit',
                 description: 'Uma salada refrescante e completa para os dias mais quentes.',
                 ingredients: ['1 xícara de trigo para quibe', '300g de frango desfiado', 'Tomate, pepino e cebola picados', 'Hortelã e salsinha', 'Azeite, limão e sal'],
                 prep: [
@@ -765,7 +880,8 @@
             },
             {
                 id: 'couve-refogada-ovos',
-                title: 'Couve Refogada com Ovos (Fit)',
+                title: 'Couve Refogada com Ovos',
+                category: 'fit',
                 description: 'Uma combinação simples, nutritiva e muito brasileira.',
                 ingredients: ['1 maço de couve picada', '2 ovos', '1 dente de alho', 'Azeite e sal'],
                 prep: [
@@ -776,7 +892,8 @@
             },
             {
                 id: 'tortinha-frango',
-                title: 'Tortinha de Frango Integral (Fit)',
+                title: 'Tortinha de Frango Integral',
+                category: 'fit',
                 description: 'Perfeito para quem busca uma refeição fácil de transportar e deliciosa.',
                 ingredients: ['Massa de torta integral', 'Recheio de frango desfiado', 'Milho', 'Queijo cottage'],
                 prep: [
@@ -786,7 +903,8 @@
             },
             {
                 id: 'hamburguer-caseiro',
-                title: 'Hambúrguer de Frango Caseiro (Tradicional)',
+                title: 'Hambúrguer de Frango Caseiro',
+                category: 'tradicional',
                 description: 'Uma forma saudável de comer hambúrguer. Pode ser feito em grande quantidade e congelado.',
                 ingredients: ['500g de peito de frango moído', '1/2 cebola picada', 'Cheiro verde', 'Sal e temperos a gosto'],
                 prep: [
@@ -796,7 +914,8 @@
             },
             {
                 id: 'strogonoff-classico',
-                title: 'Strogonoff Clássico de Frango (Tradicional)',
+                title: 'Strogonoff Clássico de Frango',
+                category: 'tradicional',
                 description: 'A versão cremosa e amada por todos, perfeita para marmitas de sucesso.',
                 ingredients: ['500g de peito de frango em cubos', '1 cebola picada', '2 dentes de alho', '2 colheres de sopa de mostarda', '2 colheres de sopa de catchup', '1 caixa de creme de leite', 'Champignon'],
                 prep: [
@@ -807,7 +926,8 @@
             },
             {
                 id: 'macarrao-bolonhesa',
-                title: 'Macarrão à Bolonhesa Simples (Tradicional)',
+                title: 'Macarrão à Bolonhesa Simples',
+                category: 'tradicional',
                 description: 'Um prato clássico, fácil de preparar e que agrada a todos os paladares.',
                 ingredients: ['500g de carne moída', '1 cebola picada', '2 dentes de alho', '1 molho de tomate', 'Sal e orégano', '500g de macarrão'],
                 prep: [
@@ -819,7 +939,8 @@
             },
             {
                 id: 'escondidinho-mandioquinha',
-                title: 'Escondidinho de Mandioquinha com Carne Seca (Tradicional)',
+                title: 'Escondidinho de Mandioquinha com Carne Seca',
+                category: 'tradicional',
                 description: 'Uma versão deliciosa e reconfortante do clássico escondidinho.',
                 ingredients: ['500g de carne seca desfiada', '1kg de mandioquinha', '1 cebola', '2 dentes de alho', 'Queijo mussarela ralado', 'Sal e pimenta'],
                 prep: [
@@ -831,7 +952,8 @@
             },
             {
                 id: 'feijoada',
-                title: 'Feijoada Completa para Marmita (Tradicional)',
+                title: 'Feijoada Completa para Marmita',
+                category: 'tradicional',
                 description: 'Feijoada caseira perfeita para porcionar e vender. Um clássico da culinária brasileira.',
                 ingredients: ['500g de feijão preto', '150g de carne seca', '100g de costelinha defumada', '100g de linguiça calabresa', 'Couve refogada', 'Arroz e farofa'],
                 prep: [
@@ -842,7 +964,8 @@
             },
             {
                 id: 'yakisoba',
-                title: 'Yakisoba de Frango Caseiro (Tradicional)',
+                title: 'Yakisoba de Frango Caseiro',
+                category: 'tradicional',
                 description: 'Prato com inspiração oriental, rápido e versátil.',
                 ingredients: ['300g de macarrão para yakisoba', '300g de peito de frango em tiras', 'Brócolis', 'Cenoura', 'Pimentão', 'Molho shoyu e óleo de gergelim'],
                 prep: [
@@ -853,7 +976,8 @@
             },
             {
                 id: 'risoto-cremoso',
-                title: 'Risoto de Frango Cremoso (Tradicional)',
+                title: 'Risoto de Frango Cremoso',
+                category: 'tradicional',
                 description: 'Um risoto simples e cremoso, com sabor caseiro e irresistível.',
                 ingredients: ['1 xícara de arroz arbóreo', '1/2 cebola picada', '200g de frango desfiado', '1/2 xícara de vinho branco', 'Caldo de legumes', 'Queijo parmesão ralado'],
                 prep: [
@@ -864,7 +988,8 @@
             },
             {
                 id: 'bife-acebolado',
-                title: 'Bife Acebolado com Purê de Batata (Tradicional)',
+                title: 'Bife Acebolado com Purê de Batata',
+                category: 'tradicional',
                 description: 'O clássico bife com cebola, perfeito para a sua marmita.',
                 ingredients: ['4 bifes de patinho', '2 cebolas em rodelas', '1kg de batata', 'Leite e manteiga', 'Sal e pimenta'],
                 prep: [
@@ -875,7 +1000,8 @@
             },
             {
                 id: 'frango-catupiry',
-                title: 'Frango com Catupiry (Tradicional)',
+                title: 'Frango com Catupiry',
+                category: 'tradicional',
                 description: 'A combinação que todo mundo ama, agora na sua marmita.',
                 ingredients: ['500g de peito de frango desfiado', '1 pote de requeijão ou catupiry', 'Milho', 'Queijo mussarela'],
                 prep: [
@@ -886,25 +1012,33 @@
         ];
 
         const recipeGrid = document.getElementById('recipe-grid');
-        const recipeDetails = document.getElementById('recipe-details');
+        const recipeModal = document.getElementById('recipe-modal');
+        const modalDetails = document.getElementById('modal-details');
 
-        recipes.forEach(recipe => {
-            const card = document.createElement('div');
-            card.className = 'bg-emerald-600 p-6 rounded-lg shadow recipe-card cursor-pointer';
-            card.innerHTML = `
-                <h5 class="font-bold text-lg text-white">${recipe.title}</h5>
-                <p class="text-white mt-2">${recipe.description}</p>
-            `;
-            card.addEventListener('click', () => showRecipeDetails(recipe));
-            recipeGrid.appendChild(card);
-        });
+        function renderRecipes(filteredRecipes) {
+            recipeGrid.innerHTML = '';
+            filteredRecipes.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = 'bg-emerald-600 p-6 rounded-lg shadow recipe-card cursor-pointer';
+                card.innerHTML = `
+                    <h5 class="font-bold text-lg text-white">${recipe.title}</h5>
+                    <p class="text-white mt-2">${recipe.description}</p>
+                `;
+                card.addEventListener('click', () => showRecipeDetails(recipe));
+                recipeGrid.appendChild(card);
+            });
+        }
+        
+        function filterRecipes(category) {
+            const filtered = category === 'all' ? recipes : recipes.filter(r => r.category === category);
+            renderRecipes(filtered);
+        }
 
         function showRecipeDetails(recipe) {
-            recipeDetails.style.display = 'block';
             let ingredientsHtml = recipe.ingredients.map(ing => `<li>${ing}</li>`).join('');
             let prepHtml = recipe.prep.map(step => `<li>${step}</li>`).join('');
 
-            recipeDetails.innerHTML = `
+            modalDetails.innerHTML = `
                 <h4 class="font-bold text-xl mb-4 text-emerald-600">${recipe.title}</h4>
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
@@ -921,7 +1055,11 @@
                     </div>
                 </div>
             `;
-            recipeDetails.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            recipeModal.showModal();
+        }
+
+        function closeModal() {
+            recipeModal.close();
         }
 
         const costInput = document.getElementById('cost');
@@ -1016,6 +1154,7 @@
         
         window.addEventListener('load', () => {
             updatePrice();
+            renderRecipes(recipes);
             
             confetti({
                 particleCount: 100,
