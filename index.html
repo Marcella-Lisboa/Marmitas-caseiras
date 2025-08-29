@@ -24,20 +24,34 @@
         .recipe-card { transition: transform 0.2s, box-shadow 0.2s; }
         .recipe-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
         .modal-content { max-height: 80vh; overflow-y: auto; }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .depoimento-slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .depoimento-slide.active {
+            display: block;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-white text-stone-800">
 
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <header class="bg-white shadow-sm sticky-nav">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold text-emerald-600">Marcella Lisboa - Marmita de Sucesso</h1>
+            <h1 class="text-xl md:text-2xl font-bold text-emerald-600">Marcella Lisboa</h1>
             <div class="hidden md:flex space-x-6">
-                <a href="#inicio" class="text-stone-600 hover:text-emerald-600 transition">Início</a>
-                <a href="#planejamento" class="text-stone-600 hover:text-emerald-600 transition">Planejamento</a>
-                <a href="#preparo" class="text-stone-600 hover:text-emerald-600 transition">Preparo</a>
-                <a href="#financas" class="text-stone-600 hover:text-emerald-600 transition">Finanças</a>
-                <a href="#marketing" class="text-stone-600 hover:text-emerald-600 transition">Marketing</a>
-                <a href="#bonus" class="text-stone-600 hover:text-emerald-600 transition">Bônus</a>
+                <a href="#inicio" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">🏠</span>Início</a>
+                <a href="#planejamento" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">📋</span>Planejamento</a>
+                <a href="#preparo" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">🍳</span>Preparo</a>
+                <a href="#financas" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">💰</span>Finanças</a>
+                <a href="#marketing" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">📢</span>Marketing</a>
+                <a href="#bonus" class="text-stone-600 hover:text-emerald-600 transition flex items-center"><span class="mr-2">🎁</span>Bônus</a>
             </div>
         </nav>
     </header>
@@ -45,13 +59,88 @@
     <main class="container mx-auto px-6 py-8 md:py-12 relative">
 
         <section id="inicio" class="text-center mb-12 md:mb-16 relative">
-            <h2 id="bonus-message" class="text-3xl md:text-4xl font-bold mb-4 inline-block relative z-20">Parabéns pela compra, faça bom proveito do seu bônus</h2>
-            <p class="text-lg text-stone-600 max-w-3xl mx-auto">Transforme seu plano em ação. Use esta ferramenta interativa para planejar, calcular e lançar seu negócio de marmitas fitness.</p>
+            <div class="inline-block relative bg-white border-2 border-emerald-600 rounded-full px-6 py-2 mb-4">
+                <p class="text-xs md:text-sm font-bold text-emerald-600 tracking-wider">BÔNUS EXCLUSIVO — Somente para as primeiras 30 compras!</p>
+            </div>
+            <h2 id="bonus-message" class="text-3xl md:text-4xl font-bold mb-4 inline-block relative z-20">Parabéns por garantir sua vaga!</h2>
+            <p class="text-lg text-stone-600 max-w-3xl mx-auto">Este bônus foi criado para transformar sua cozinha em uma fonte de renda com praticidade e clareza. Vamos começar?</p>
+            <div class="mt-8 flex justify-center space-x-4">
+            </div>
+        </section>
+        
+        <section id="depoimentos" class="mb-12 md:mb-16">
+            <div class="bg-emerald-50 p-6 rounded-lg shadow-md text-center">
+                <h3 class="text-lg font-bold text-emerald-800 mb-4">O que nossas alunas estão dizendo...</h3>
+                <div id="depoimentos-container" class="relative flex items-center justify-center">
+                    <button onclick="prevTestimonial()" class="absolute left-0 top-1/2 -mt-4 bg-emerald-600 text-white rounded-full p-2 hover:bg-emerald-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <div class="w-full">
+                        <div class="depoimento-slide active">
+                            <p class="text-lg italic text-stone-700">"Graças a esse bônus, consegui montar meu cardápio rentável e aumentar minhas vendas em 50% em apenas uma semana."</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Ana, Campinas/SP</p>
+                        </div>
+                        <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"As receitas são incríveis e a calculadora me ajudou a sair do prejuízo. Não imaginava que era tão fácil começar!"</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Bianca, São Paulo/SP</p>
+                        </div>
+                        <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"O módulo de marketing abriu minha mente para novas ideias de divulgação. Já estou com a agenda cheia de pedidos!"</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Carla, Rio de Janeiro/RJ</p>
+                        </div>
+                         <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"O site é lindo e as receitas são muito claras! Pela primeira vez me senti confiante para começar a vender. Obrigada!"</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Juliana, Belo Horizonte/MG</p>
+                        </div>
+                        <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"Com as dicas de congelamento, consigo me organizar para a semana toda sem perder a qualidade. Isso me economizou muito tempo."</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Fernanda, Curitiba/PR</p>
+                        </div>
+                         <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"Eu estava perdida com os preços e a calculadora foi a solução. Agora sei exatamente quanto cobrar para ter lucro."</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Patricia, Porto Alegre/RS</p>
+                        </div>
+                        <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"As receitas são deliciosas e os clientes amaram! Meu cardápio agora é muito mais variado e profissional."</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Mariana, Salvador/BA</p>
+                        </div>
+                        <div class="depoimento-slide">
+                            <p class="text-lg italic text-stone-700">"A seção de marketing me deu o empurrão que faltava para divulgar meu trabalho. Já consegui vários clientes novos!"</p>
+                            <p class="mt-2 font-semibold text-emerald-600">- Luiza, Fortaleza/CE</p>
+                        </div>
+                    </div>
+                    <button onclick="nextTestimonial()" class="absolute right-0 top-1/2 -mt-4 bg-emerald-600 text-white rounded-full p-2 hover:bg-emerald-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </section>
 
         <section id="planejamento" class="mb-12 md:mb-16">
             <h3 class="text-2xl font-bold mb-6 text-center">Módulo 1: Planejamento e Fundamentos</h3>
             <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="font-bold text-lg mb-2 text-emerald-600">📋 Identidade do Negócio</h4>
+                    <p class="text-stone-600">A base do seu negócio. Pense no nome, no público e no que torna suas marmitas especiais.</p>
+                    <ul class="mt-4 space-y-2 text-stone-700 list-disc list-inside">
+                        <li>**Nome:** Algo fácil de lembrar e que combine com seu nicho.</li>
+                        <li>**Público-alvo:** Quem você quer atingir? Mães, estudantes, profissionais?</li>
+                        <li>**Nicho:** Comidas fitness, caseiras, veganas, ou opções para dietas específicas.</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h4 class="font-bold text-lg mb-2 text-emerald-600">🗓️ Planejamento de Cardápio Estratégico</h4>
+                    <p class="text-stone-600">Um cardápio bem planejado otimiza seu tempo e reduz o desperdício de ingredientes.</p>
+                    <ul class="mt-4 space-y-2 text-stone-700 list-disc list-inside">
+                        <li>**Custo:** Calcule o valor de cada receita para garantir que seja rentável.</li>
+                        <li>**Variedade:** Ofereça opções diferentes, mas que permitam o uso dos mesmos ingredientes base.</li>
+                        <li>**Praticidade:** Escolha receitas que possam ser preparadas em grande quantidade.</li>
+                    </ul>
+                </div>
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h4 class="font-bold text-lg mb-2 text-emerald-600">🛠️ Ferramentas Essenciais</h4>
                     <p class="text-stone-600">Comece com o que você tem. A qualidade dos seus utensílios impacta diretamente na eficiência da sua produção.</p>
@@ -241,773 +330,836 @@
     </footer>
 
     <script>
+        const testimonials = [
+            {
+                text: "Graças a esse bônus, consegui montar meu cardápio rentável e aumentar minhas vendas em 50% em apenas uma semana.",
+                author: "Ana, Campinas/SP"
+            },
+            {
+                text: "As receitas são incríveis e a calculadora me ajudou a sair do prejuízo. Não imaginava que era tão fácil começar!",
+                author: "Bianca, São Paulo/SP"
+            },
+            {
+                text: "O módulo de marketing abriu minha mente para novas ideias de divulgação. Já estou com a agenda cheia de pedidos!" ,
+                author: "Carla, Rio de Janeiro/RJ"
+            },
+            {
+                text: "O site é lindo e as receitas são muito claras! Pela primeira vez me senti confiante para começar a vender. Obrigada!",
+                author: "Juliana, Belo Horizonte/MG"
+            },
+            {
+                text: "Com as dicas de congelamento, consigo me organizar para a semana toda sem perder a qualidade. Isso me economizou muito tempo.",
+                author: "Fernanda, Curitiba/PR"
+            },
+            {
+                text: "Eu estava perdida com os preços e a calculadora foi a solução. Agora sei exatamente quanto cobrar para ter lucro.",
+                author: "Patricia, Porto Alegre/RS"
+            },
+            {
+                text: "As receitas são deliciosas e os clientes amaram! Meu cardápio agora é muito mais variado e profissional.",
+                author: "Mariana, Salvador/BA"
+            },
+            {
+                text: "A seção de marketing me deu o empurrão que faltava para divulgar meu trabalho. Já consegui vários clientes novos!",
+                author: "Luiza, Fortaleza/CE"
+            }
+        ];
+
+        let currentTestimonialIndex = 0;
+        const depoimentosContainer = document.getElementById('depoimentos-container');
+        const depoimentoSlidesContainer = depoimentosContainer.querySelector('.w-full');
+        let testimonialInterval;
+
+        function showTestimonial(index) {
+            depoimentoSlidesContainer.innerHTML = `
+                <div class="depoimento-slide active">
+                    <p class="text-lg italic text-stone-700">"${testimonials[index].text}"</p>
+                    <p class="mt-2 font-semibold text-emerald-600">- ${testimonials[index].author}</p>
+                </div>
+            `;
+        }
+
+        function nextTestimonial() {
+            currentTestimonialIndex = (currentTestimonialIndex + 1) % testimonials.length;
+            showTestimonial(currentTestimonialIndex);
+        }
+
+        function prevTestimonial() {
+            currentTestimonialIndex = (currentTestimonialIndex - 1 + testimonials.length) % testimonials.length;
+            showTestimonial(currentTestimonialIndex);
+        }
+
+        depoimentosContainer.addEventListener('mouseenter', () => clearInterval(testimonialInterval));
+        depoimentosContainer.addEventListener('mouseleave', () => testimonialInterval = setInterval(nextTestimonial, 5000));
+
+
         const recipes = [
             {
                 id: 'frango',
-                title: 'Frango Grelhado com Purê de Batata Doce',
+                title: 'Frango Grelhado com Purê de Batata Doce (Fit)',
                 category: 'fit',
                 description: 'Um clássico fitness, rico em proteína e carboidratos de baixo índice glicêmico.',
-                ingredients: ['500g de peito de frango', '1kg de batata doce', 'Azeite, sal e pimenta-do-reino a gosto', 'Especiarias para o frango (páprica, açafrão)'],
                 prep: [
                     '1. Cozinhe o frango em água ou na airfryer e desfie bem. Tempere a gosto com as especiarias.',
                     '2. Cozinhe a batata doce até ficar macia. Amasse-a, misture com um fio de azeite e acerte o sal.',
                     '3. Monte a marmita com uma porção do frango e outra do purê.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango', '1kg de batata doce', 'Azeite, sal e pimenta-do-reino a gosto', 'Especiarias para o frango (páprica, açafrão)']
             },
             {
                 id: 'carne',
-                title: 'Picadinho de Carne com Abóbora',
+                title: 'Picadinho de Carne com Abóbora (Fit)',
                 category: 'fit',
                 description: 'Uma receita simples e reconfortante, ideal para um prato principal saboroso e nutritivo.',
-                ingredients: ['500g de patinho picado em cubos', '300g de abóbora', '1 cebola picada', '2 dentes de alho amassados', 'Azeite, sal e temperos a gosto'],
                 prep: [
                     '1. Em uma panela, aqueça o azeite e refogue o alho e a cebola.',
                     '2. Adicione a carne e doure bem. Tempere com sal e pimenta-do-reino.',
                     '3. Adicione a abóbora em cubos e um pouco de água para ajudar no cozimento. Deixe cozinhar até a abóbora ficar macia.'
-                ]
+                ],
+                ingredients: ['500g de patinho picado em cubos', '300g de abóbora', '1 cebola picada', '2 dentes de alho amassados', 'Azeite, sal e temperos a gosto']
             },
             {
                 id: 'salmao',
-                title: 'Salmão Assado com Legumes Coloridos',
+                title: 'Salmão Assado com Legumes Coloridos (Fit)',
                 category: 'fit',
                 description: 'Uma refeição elegante e leve, rica em ômega-3 e vitaminas. Perfeita para um almoço ou jantar nutritivo.',
-                ingredients: ['2 a 3 filés de salmão', '1 abobrinha média em rodelas', '1 cenoura em palitos', 'Brócolis em floretes', 'Azeite, suco de limão e sal a gosto'],
                 prep: [
                     '1. Pré-aqueça o forno a 200°C.',
                     '2. Em uma assadeira, coloque o salmão e os legumes. Regue tudo com azeite, suco de limão e sal.',
                     '3. Cubra com papel-alumínio e asse por 15 minutos. Retire o papel e asse por mais 10 a 15 minutos para dourar.'
-                ]
+                ],
+                ingredients: ['2 a 3 filés de salmão', '1 abobrinha média em rodelas', '1 cenoura em palitos', 'Brócolis em floretes', 'Azeite, suco de limão e sal a gosto']
             },
             {
                 id: 'frango-desfiado',
-                title: 'Frango Desfiado Cremoso',
+                title: 'Frango Desfiado Cremoso (Fit)',
                 category: 'fit',
                 description: 'Versátil, econômico e delicioso. Pode ser usado como recheio ou como prato principal.',
-                ingredients: ['500g de peito de frango', '1 pote de requeijão light (200g)', '1 lata de milho verde', 'Cheiro verde a gosto', 'Sal e pimenta do reino'],
                 prep: [
                     '1. Cozinhe o peito de frango na panela de pressão com um pouco de água. Depois de cozido, desfie-o chacoalhando a panela ou com a ajuda de um garfo.',
                     '2. Em uma panela, misture o frango desfiado com o requeijão e o milho.',
                     '3. Acerte o sal e a pimenta e finalize com o cheiro verde.',
                     '4. Sirva com arroz integral e legumes de sua preferência.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango', '1 pote de requeijão light (200g)', '1 lata de milho verde', 'Cheiro verde a gosto', 'Sal e pimenta do reino']
             },
             {
                 id: 'lasanha',
-                title: 'Lasanha de Abobrinha à Bolonhesa',
+                title: 'Lasanha de Abobrinha à Bolonhesa (Fit)',
                 category: 'fit',
                 description: 'Uma versão mais leve da lasanha tradicional, substituindo a massa por fatias finas de abobrinha.',
-                ingredients: ['2 abobrinhas grandes', '500g de carne moída (patinho)', '1 cebola picada', '1 molho de tomate caseiro ou sem conservantes', 'Queijo mussarela fatiado'],
                 prep: [
                     '1. Corte as abobrinhas em fatias finas no sentido do comprimento. Cozinhe-as no vapor ou em água fervente por 2 minutos para ficarem maleáveis.',
                     '2. Prepare a carne moída refogando a cebola e o alho, adicionando a carne e o molho de tomate.',
                     '3. Em um refratário, intercale as camadas: abobrinha, carne moída e queijo. Repita até o final.',
                     '4. Leve ao forno pré-aquecido a 180°C por cerca de 20 minutos ou até o queijo gratinar.'
-                ]
+                ],
+                ingredients: ['2 abobrinhas grandes', '500g de carne moída (patinho)', '1 cebola picada', '1 molho de tomate caseiro ou sem conservantes', 'Queijo mussarela fatiado']
             },
             {
                 id: 'tilapia',
-                title: 'Filé de Tilápia Grelhado com Mix de Vegetais',
+                title: 'Filé de Tilápia Grelhado com Mix de Vegetais (Fit)',
                 category: 'fit',
                 description: 'Uma opção rápida e saudável para a sua marmita, com sabor fresco e leve.',
-                ingredients: ['4 filés de tilápia', '1 xícara de brócolis cozido', '1 xícara de couve-flor cozida', '1 xícara de cenoura em cubos', 'Azeite, alho e sal a gosto'],
                 prep: [
                     '1. Tempere os filés de tilápia com alho, sal e azeite.',
                     '2. Grelhe o peixe em uma frigideira até dourar dos dois lados.',
                     '3. Refogue os vegetais no azeite com alho e sal.',
                     '4. Monte a marmita com um filé e a porção de vegetais.'
-                ]
+                ],
+                ingredients: ['4 filés de tilápia', '1 xícara de brócolis cozido', '1 xícara de couve-flor cozida', '1 xícara de cenoura em cubos', 'Azeite, alho e sal a gosto']
             },
             {
                 id: 'arroz-carne',
-                title: 'Arroz com Carne e Legumes',
+                title: 'Arroz com Carne e Legumes (Tradicional)',
                 category: 'tradicional',
                 description: 'Um prato completo e econômico que pode ser feito em grande quantidade.',
-                ingredients: ['500g de alcatra em cubos', '2 xícaras de arroz', '1 cebola picada', '1 cenoura em cubos', '1 xícara de ervilhas frescas', 'Sal e pimenta a gosto'],
                 prep: [
                     '1. Refogue a carne em uma panela com um fio de azeite até dourar.',
                     '2. Adicione a cebola e refogue mais. Junte a cenoura e as ervilhas e misture.',
                     '3. Adicione o arroz e misture bem. Cubra com água fervente e cozinhe até a água secar e o arroz ficar macio.'
-                ]
+                ],
+                ingredients: ['500g de alcatra em cubos', '2 xícaras de arroz', '1 cebola picada', '1 cenoura em cubos', '1 xícara de ervilhas frescas', 'Sal e pimenta a gosto']
             },
             {
                 id: 'salada-pote',
-                title: 'Salada de Frango no Pote',
+                title: 'Salada de Frango no Pote (Fit)',
                 category: 'fit',
                 description: 'Prática e fácil de montar, ideal para um almoço leve e refrescante.',
-                ingredients: ['200g de frango desfiado e temperado', 'Folhas de alface e rúcula', 'Tomate cereja cortado ao meio', 'Cenoura ralada', 'Milho', 'Molho a base de iogurte e limão'],
                 prep: [
                     '1. Em um pote de vidro, comece pelo molho no fundo.',
                     '2. Adicione os ingredientes mais firmes: cenoura, milho e tomate.',
                     '3. Em seguida, adicione o frango e, por último, as folhas verdes.',
                     '4. Feche bem. Na hora de comer, basta chacoalhar para misturar.'
-                ]
+                ],
+                ingredients: ['200g de frango desfiado e temperado', 'Folhas de alface e rúcula', 'Tomate cereja cortado ao meio', 'Cenoura ralada', 'Milho', 'Molho a base de iogurte e limão']
             },
             {
                 id: 'panqueca',
-                title: 'Panqueca de Frango com Molho',
+                title: 'Panqueca de Frango com Molho (Tradicional)',
                 category: 'tradicional',
                 description: 'Uma opção deliciosa e fácil de variar o cardápio, que agrada a todos.',
-                ingredients: ['Massa de panqueca (aveia ou tradicional)', '300g de frango desfiado', '1 molho de tomate caseiro', 'Queijo cottage ou catupiry para o recheio', 'Sal e orégano'],
                 prep: [
                     '1. Prepare as panquecas.',
                     '2. Recheie cada panqueca com o frango desfiado misturado com o queijo e o orégano. Enrole.',
                     '3. Disponha as panquecas em um refratário, cubra com o molho de tomate e leve ao forno para aquecer.'
-                ]
+                ],
+                ingredients: ['Massa de panqueca (aveia ou tradicional)', '300g de frango desfiado', '1 molho de tomate caseiro', 'Queijo cottage ou catupiry para o recheio', 'Sal e orégano']
             },
             {
                 id: 'omelete',
-                title: 'Omelete de Forno com Vegetais',
+                title: 'Omelete de Forno com Vegetais (Fit)',
                 category: 'fit',
                 description: 'Perfeito para um café da manhã reforçado ou um jantar leve. Rende várias porções.',
-                ingredients: ['6 ovos', '1/2 xícara de leite', '1/2 cebola picada', '1/2 pimentão em cubos', 'Espinafre picado', 'Sal e pimenta a gosto'],
                 prep: [
                     '1. Bata os ovos com o leite, sal e pimenta.',
                     '2. Em uma forma untada, espalhe a cebola, o pimentão e o espinafre.',
                     '3. Despeje a mistura de ovos por cima e leve ao forno pré-aquecido a 180°C por cerca de 20-25 minutos ou até dourar.'
-                ]
+                ],
+                ingredients: ['6 ovos', '1/2 xícara de leite', '1/2 cebola picada', '1/2 pimentão em cubos', 'Espinafre picado', 'Sal e pimenta a gosto']
             },
             {
                 id: 'sopa',
                 title: 'Sopa Creme de Mandioquinha com Frango',
                 category: 'fit',
                 description: 'Uma sopa cremosa e nutritiva, ideal para dias mais frios. Pode ser congelada facilmente.',
-                ingredients: ['500g de mandioquinha picada', '250g de frango desfiado', '1 cebola picada', '2 dentes de alho', 'Cheiro verde', 'Sal e azeite'],
                 prep: [
                     '1. Em uma panela, aqueça o azeite e refogue o alho e a cebola.',
                     '2. Adicione a mandioquinha e refogue mais um pouco.',
                     '3. Cubra com água e cozinhe até a mandioquinha ficar bem macia.',
                     '4. Bata tudo no liquidificador até virar um creme. Volte para a panela, adicione o frango desfiado e acerte o sal. Finalize com cheiro verde.'
-                ]
+                ],
+                ingredients: ['500g de mandioquinha picada', '250g de frango desfiado', '1 cebola picada', '2 dentes de alho', 'Cheiro verde', 'Sal e azeite']
             },
             {
                 id: 'bolinho-carne',
                 title: 'Bolinho de Carne Assado com Legumes',
                 category: 'tradicional',
                 description: 'Uma forma diferente de usar a carne moída, em porções individuais e práticas.',
-                ingredients: ['500g de carne moída', '1 ovo', '1/2 xícara de farinha de rosca', 'Cebola e alho picados', 'Sal e especiarias a gosto'],
                 prep: [
                     '1. Misture todos os ingredientes até formar uma massa homogênea.',
                     '2. Molde bolinhos de tamanho médio e disponha em uma assadeira untada.',
                     '3. Leve ao forno pré-aquecido a 200°C por cerca de 25 minutos, virando na metade do tempo.'
-                ]
+                ],
+                ingredients: ['500g de carne moída', '1 ovo', '1/2 xícara de farinha de rosca', 'Cebola e alho picados', 'Sal e especiarias a gosto']
             },
             {
                 id: 'feijao-tropeiro',
                 title: 'Feijão Tropeiro',
                 category: 'tradicional',
                 description: 'Uma releitura leve do clássico, com bastante sabor.',
-                ingredients: ['2 xícaras de feijão cozido', '100g de bacon picado', '100g de linguiça picada', '1/2 maço de couve picada', '1 cebola', '3 dentes de alho', 'Ovo cozido picado', 'Farinha de mandioca'],
                 prep: [
                     '1. Frite o bacon e a linguiça na panela. Adicione a cebola e o alho. Junte a couve e refogue até murchar.',
                     '2. Adicione o feijão cozido (sem o caldo) e misture.',
                     '3. Junte a farinha de mandioca aos poucos, mexendo para não empelotar. Finalize com os ovos picados.'
-                ]
+                ],
+                ingredients: ['2 xícaras de feijão cozido', '100g de bacon picado', '100g de linguiça picada', '1/2 maço de couve picada', '1 cebola', '3 dentes de alho', 'Ovo cozido picado', 'Farinha de mandioca']
             },
             {
                 id: 'frango-xadrez',
                 title: 'Frango Xadrez Light',
                 category: 'fit',
                 description: 'Um prato com sabor oriental e cores vibrantes, mas com pouca gordura.',
-                ingredients: ['500g de peito de frango em cubos', '1 pimentão vermelho', '1 pimentão amarelo', '1 cebola', 'Molho shoyu light', 'Amido de milho', 'Água', 'Gengibre ralado'],
                 prep: [
                     '1. Grelhe os cubos de frango até dourarem. Adicione a cebola e os pimentões picados e refogue.',
                     '2. Em um copo, misture o shoyu, o amido de milho e a água.',
                     '3. Adicione a mistura ao frango e mexa até engrossar. Cozinhe por mais 5 minutos e sirva.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango em cubos', '1 pimentão vermelho', '1 pimentão amarelo', '1 cebola', 'Molho shoyu light', 'Amido de milho', 'Água', 'Gengibre ralado']
             },
             {
                 id: 'bolinho-frango-batata',
                 title: 'Bolinho de Frango e Batata Doce',
                 category: 'fit',
                 description: 'Práticos para comer em qualquer lugar, esses bolinhos são uma excelente fonte de energia.',
-                ingredients: ['500g de peito de frango cozido e desfiado', '1 batata doce média cozida e amassada', 'Cheiro verde', 'Sal e temperos a gosto', 'Farinha de aveia'],
                 prep: [
                     '1. Misture o frango desfiado com a batata doce amassada e os temperos.',
                     '2. Adicione farinha de aveia aos poucos até a massa parar de grudar nas mãos.',
                     '3. Molde os bolinhos e asse em forno pré-aquecido a 200°C ou na airfryer até dourarem.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango cozido e desfiado', '1 batata doce média cozida e amassada', 'Cheiro verde', 'Sal e temperos a gosto', 'Farinha de aveia']
             },
             {
                 id: 'arroz-lentilha',
                 title: 'Arroz com Lentilha e Vegetais',
                 category: 'fit',
                 description: 'Uma refeição vegana e completa, cheia de sabor e nutrientes.',
-                ingredients: ['1 xícara de arroz integral', '1 xícara de lentilha', '1/2 cebola picada', 'Alho', 'Cenoura e abobrinha em cubos'],
                 prep: [
                     '1. Refogue o alho e a cebola. Adicione o arroz e a lentilha.',
                     '2. Junte a cenoura e a abobrinha.',
                     '3. Cubra com água quente, acerte o sal e cozinhe em fogo baixo até a água secar. Deixe descansar antes de servir.'
-                ]
+                ],
+                ingredients: ['1 xícara de arroz integral', '1 xícara de lentilha', '1/2 cebola picada', 'Alho', 'Cenoura e abobrinha em cubos']
             },
             {
                 id: 'tilapia-molho',
                 title: 'Tilápia ao Molho de Tomate',
                 category: 'fit',
                 description: 'Uma forma fácil de preparar peixe, com molho caseiro e saboroso.',
-                ingredients: ['4 filés de tilápia', '1 molho de tomate caseiro', 'Cebola e alho', 'Azeite', 'Manjericão fresco'],
                 prep: [
                     '1. Grelhe os filés de tilápia até ficarem cozidos por dentro.',
                     '2. Em outra panela, aqueça o molho de tomate com alho, cebola e manjericão.',
                     '3. Cubra os filés com o molho e deixe aquecer por mais 5 minutos.'
-                ]
+                ],
+                ingredients: ['4 filés de tilápia', '1 molho de tomate caseiro', 'Cebola e alho', 'Azeite', 'Manjericão fresco']
             },
             {
                 id: 'crepioca',
                 title: 'Crepioca Recheada com Queijo e Tomate',
                 category: 'fit',
                 description: 'Rápida de fazer e ótima para variar o lanche da tarde ou uma refeição leve.',
-                ingredients: ['2 ovos', '2 colheres de sopa de goma de tapioca', 'Sal', 'Queijo minas ou cottage', 'Tomate cereja'],
                 prep: [
                     '1. Em um recipiente, misture os ovos, a goma e o sal até obter uma massa homogênea.',
                     '2. Despeje a massa em uma frigideira antiaderente pré-aquecida e cozinhe dos dois lados.',
                     '3. Recheie com o queijo e o tomate e dobre ao meio.'
-                ]
+                ],
+                ingredients: ['2 ovos', '2 colheres de sopa de goma de tapioca', 'Sal', 'Queijo minas ou cottage', 'Tomate cereja']
             },
             {
                 id: 'risoto-couveflor',
                 title: 'Risoto de Couve-Flor',
                 category: 'fit',
                 description: 'Uma alternativa com baixo carboidrato para o risoto tradicional, surpreendentemente saborosa.',
-                ingredients: ['1 couve-flor média ralada', '250g de frango desfiado', '1/2 cebola', 'Azeite', 'Cheiro verde', 'Queijo parmesão ralado'],
                 prep: [
                     '1. Triture a couve-flor em um processador até ficar com a textura de "arroz".',
                     '2. Em uma panela, refogue a cebola no azeite. Adicione o frango e a couve-flor ralada.',
                     '3. Cozinhe por cerca de 5-7 minutos. Sirva com queijo por cima.'
-                ]
+                ],
+                ingredients: ['1 couve-flor média ralada', '250g de frango desfiado', '1/2 cebola', 'Azeite', 'Cheiro verde', 'Queijo parmesão ralado']
             },
             {
                 id: 'carne-legumes',
                 title: 'Carne de Panela com Legumes',
                 category: 'tradicional',
                 description: 'Um clássico do almoço de domingo, agora na sua marmita. A carne fica super macia.',
-                ingredients: ['500g de carne de panela em cubos', '2 batatas em cubos', '1 cenoura em rodelas', '1 cebola', 'Tomate', 'Molho de tomate', 'Sal e louro'],
                 prep: [
                     '1. Doure a carne na panela de pressão. Adicione a cebola e o tomate e refogue.',
                     '2. Junte o molho de tomate, sal e a folha de louro. Cubra com água e cozinhe por 30-40 minutos.',
                     '3. Quando a carne estiver macia, adicione a batata e a cenoura e cozinhe por mais 15 minutos.'
-                ]
+                ],
+                ingredients: ['500g de carne de panela em cubos', '2 batatas em cubos', '1 cenoura em rodelas', '1 cebola', 'Tomate', 'Molho de tomate', 'Sal e louro']
             },
             {
                 id: 'macarrao-integral',
                 title: 'Macarrão Integral com Brócolis e Frango',
                 category: 'fit',
                 description: 'Rápido, fácil e delicioso, perfeito para uma refeição prática e balanceada.',
-                ingredients: ['250g de macarrão integral', '300g de frango em cubos', '1 brócolis médio', '2 dentes de alho', 'Azeite, sal e pimenta'],
                 prep: [
                     '1. Cozinhe o macarrão de acordo com as instruções da embalagem. Cozinhe o brócolis no vapor.',
                     '2. Grelhe o frango com alho, sal e pimenta.',
                     '3. Em uma frigideira, misture o macarrão, o frango e o brócolis com um fio de azeite. Sirva em seguida.'
-                ]
+                ],
+                ingredients: ['250g de macarrão integral', '300g de frango em cubos', '1 brócolis médio', '2 dentes de alho', 'Azeite, sal e pimenta']
             },
             {
                 id: 'estrogonofe-legumes',
                 title: 'Estrogonofe de Legumes',
                 category: 'vegano',
                 description: 'Uma versão vegana do estrogonofe, com a textura e o sabor dos vegetais.',
-                ingredients: ['1 xícara de cogumelos fatiados', '1 abobrinha em cubos', '1 cenoura em cubos', '1 cebola', 'Molho de tomate', 'Leite de coco light'],
                 prep: [
                     '1. Refogue a cebola em um fio de azeite. Adicione os vegetais e refogue por 5 minutos.',
                     '2. Junte o molho de tomate e o leite de coco. Cozinhe em fogo baixo até o molho engrossar.',
                     '3. Sirva com arroz integral e batata palha assada.'
-                ]
+                ],
+                ingredients: ['1 xícara de cogumelos fatiados', '1 abobrinha em cubos', '1 cenoura em cubos', '1 cebola', 'Molho de tomate', 'Leite de coco light']
             },
             {
                 id: 'creme-brocolis',
                 title: 'Creme de Brócolis com Ricota',
                 category: 'fit',
                 description: 'Um creme leve, nutritivo e super rápido de preparar.',
-                ingredients: ['1 brócolis grande', '2 dentes de alho', '1 cebola', '200g de ricota fresca', 'Sal e noz-moscada'],
                 prep: [
                     '1. Cozinhe o brócolis e a cebola em água. Reserve a água.',
                     '2. Bata o brócolis cozido, a cebola e a ricota no liquidificador com um pouco da água do cozimento até obter uma consistência cremosa.',
                     '3. Volte à panela, tempere com sal e noz-moscada e aqueça em fogo baixo.'
-                ]
+                ],
+                ingredients: ['1 brócolis grande', '2 dentes de alho', '1 cebola', '200g de ricota fresca', 'Sal e noz-moscada']
             },
             {
                 id: 'sopa-lentilha',
                 title: 'Sopa de Lentilha e Vegetais',
                 category: 'tradicional',
                 description: 'Uma sopa completa, perfeita para o inverno e fácil de porcionar em marmitas.',
-                ingredients: ['1 xícara de lentilha', '1 cebola picada', '2 cenouras em rodelas', '2 talos de aipo', 'Tomate pelado', 'Louro'],
                 prep: [
                     '1. Refogue a cebola e o aipo.',
                     '2. Junte a lentilha, a cenoura, o tomate pelado e a folha de louro.',
                     '3. Cubra com água, tempere com sal e cozinhe até a lentilha ficar macia.'
-                ]
+                ],
+                ingredients: ['1 xícara de lentilha', '1 cebola picada', '2 cenouras em rodelas', '2 talos de aipo', 'Tomate pelado', 'Louro']
             },
             {
                 id: 'frango-coco',
                 title: 'Frango com Curry e Leite de Coco',
                 category: 'tradicional',
                 description: 'Um prato exótico e muito saboroso que foge do comum.',
-                ingredients: ['500g de frango em cubos', '1 cebola picada', '1 colher de sopa de curry', '1 vidro de leite de coco', 'Sal'],
                 prep: [
                     '1. Refogue a cebola e doure o frango.',
                     '2. Adicione o curry e cozinhe por 1 minuto.',
                     '3. Junte o leite de coco, acerte o sal e cozinhe por mais 10 minutos.'
-                ]
+                ],
+                ingredients: ['500g de frango em cubos', '1 cebola picada', '1 colher de sopa de curry', '1 vidro de leite de coco', 'Sal']
             },
             {
                 id: 'carne-gengibre',
                 title: 'Carne com Gengibre e Brócolis',
                 category: 'fit',
                 description: 'Uma inspiração oriental para um prato rápido e nutritivo.',
-                ingredients: ['500g de carne em tiras', '1 brócolis', '1 pedaço de gengibre ralado', 'Molho shoyu light', 'Óleo de gergelim'],
                 prep: [
                     '1. Grelhe a carne em tiras em fogo alto.',
                     '2. Adicione o brócolis e refogue por 3 minutos. Junte o gengibre, o shoyu e o óleo de gergelim.',
                     '3. Misture bem e sirva com arroz integral.'
-                ]
+                ],
+                ingredients: ['500g de carne em tiras', '1 brócolis', '1 pedaço de gengibre ralado', 'Molho shoyu light', 'Óleo de gergelim']
             },
             {
                 id: 'macarrao-atum',
                 title: 'Macarrão com Atum e Legumes',
                 category: 'fit',
                 description: 'Uma receita super rápida, perfeita para um almoço de última hora.',
-                ingredients: ['250g de macarrão integral', '1 lata de atum em água', 'Milho e ervilha', 'Tomate picado', 'Azeite, sal e orégano'],
                 prep: [
                     '1. Cozinhe o macarrão.',
                     '2. Em uma tigela, misture o atum escorrido, o milho, a ervilha, o tomate e os temperos.',
                     '3. Junte o macarrão e misture bem. Pode ser servido frio ou quente.'
-                ]
+                ],
+                ingredients: ['250g de macarrão integral', '1 lata de atum em água', 'Milho e ervilha', 'Tomate picado', 'Azeite, sal e orégano']
             },
             {
                 id: 'quinoa-frango',
                 title: 'Quinoa com Frango e Vegetais',
                 category: 'fit',
                 description: 'Uma marmita completa e cheia de fibras, ideal para quem quer variar o cardápio.',
-                ingredients: ['1 xícara de quinoa', '300g de frango desfiado', 'Abobrinha em cubos', 'Cenoura em cubos', 'Pimentão'],
                 prep: [
                     '1. Cozinhe a quinoa (o dobro de água para 1 de quinoa).',
                     '2. Refogue os vegetais no azeite. Junte o frango desfiado e misture.',
                     '3. Adicione a quinoa cozida e misture bem. Acerte o sal e a pimenta.'
-                ]
+                ],
+                ingredients: ['1 xícara de quinoa', '300g de frango desfiado', 'Abobrinha em cubos', 'Cenoura em cubos', 'Pimentão']
             },
             {
                 id: 'lentilha-vermelha',
                 title: 'Curry de Lentilha Vermelha',
                 category: 'vegano',
                 description: 'Um curry vegano, super cremoso e com sabor único.',
-                ingredients: ['1 xícara de lentilha vermelha', '1 cebola picada', '2 dentes de alho', '1 colher de sopa de curry', 'Leite de coco light'],
                 prep: [
                     '1. Refogue a cebola e o alho. Adicione o curry e a lentilha.',
                     '2. Cubra com água e cozinhe por 15-20 minutos, até a lentilha ficar macia.',
                     '3. Junte o leite de coco, acerte o sal e cozinhe por mais 5 minutos.'
-                ]
+                ],
+                ingredients: ['1 xícara de lentilha vermelha', '1 cebola picada', '2 dentes de alho', '1 colher de sopa de curry', 'Leite de coco light']
             },
             {
                 id: 'ovos-cozidos',
                 title: 'Marmita com Ovos Cozidos e Batata Doce',
                 category: 'fit',
                 description: 'Uma marmita simples e super proteica. Perfeita para um dia corrido.',
-                ingredients: ['2 a 3 ovos cozidos', '1 batata doce média', 'Brócolis', 'Tomate cereja', 'Azeite, sal e orégano'],
                 prep: [
                     '1. Cozinhe os ovos e a batata doce. Descasque os ovos e corte a batata em cubos.',
                     '2. Cozinhe o brócolis no vapor.',
                     '3. Monte a marmita com os ingredientes e tempere com azeite, sal e orégano.'
-                ]
+                ],
+                ingredients: ['2 a 3 ovos cozidos', '1 batata doce média', 'Brócolis', 'Tomate cereja', 'Azeite, sal e orégano']
             },
             {
                 id: 'frango-assado',
                 title: 'Frango Assado com Batatas e Alecrim',
                 category: 'tradicional',
                 description: 'Saboroso e prático. Uma ótima opção para preparar em grandes quantidades.',
-                ingredients: ['4 filés de frango', '3 batatas médias', '1 cebola em rodelas', 'Alecrim fresco', 'Azeite, sal e pimenta'],
                 prep: [
                     '1. Corte as batatas em cubos e a cebola em rodelas. Misture tudo em uma assadeira com azeite, sal, pimenta e alecrim.',
                     '2. Coloque os filés de frango por cima e tempere-os com azeite, sal e pimenta.',
                     '3. Asse em forno pré-aquecido a 200°C por cerca de 30-40 minutos ou até o frango e as batatas dourarem.'
-                ]
+                ],
+                ingredients: ['4 filés de frango', '3 batatas médias', '1 cebola em rodelas', 'Alecrim fresco', 'Azeite, sal e pimenta']
             },
             {
                 id: 'escondidinho-carne',
                 title: 'Escondidinho de Carne Seca e Aipim',
                 category: 'tradicional',
                 description: 'O sabor da comida brasileira em uma marmita completa.',
-                ingredients: ['500g de carne seca cozida e desfiada', '1kg de aipim cozido e amassado', '1 cebola', '2 dentes de alho', 'Cheiro verde', 'Sal e pimenta'],
                 prep: [
                     '1. Prepare o purê de aipim. Em uma panela, refogue o alho e a cebola e junte a carne seca.',
                     '2. Em um refratário, faça uma camada de purê, uma de carne seca e finalize com mais purê.',
                     '3. Leve ao forno para gratinar.'
-                ]
+                ],
+                ingredients: ['500g de carne seca cozida e desfiada', '1kg de aipim cozido e amassado', '1 cebola', '2 dentes de alho', 'Cheiro verde', 'Sal e pimenta']
             },
             {
                 id: 'arroz-vegetais',
                 title: 'Arroz Integral com Vegetais Coloridos',
                 category: 'fit',
                 description: 'Uma marmita vegetariana e muito nutritiva, cheia de cores e sabor.',
-                ingredients: ['2 xícaras de arroz integral cozido', '1 cenoura picada', '1 pimentão em cubos', '1 brócolis picado', 'Milho e ervilha', 'Azeite, sal e páprica'],
                 prep: [
                     '1. Refogue os vegetais no azeite até ficarem al dente.',
                     '2. Junte o arroz integral já cozido e misture bem. Tempere com sal e páprica.',
                     '3. Sirva em seguida.'
-                ]
+                ],
+                ingredients: ['2 xícaras de arroz integral cozido', '1 cenoura picada', '1 pimentão em cubos', '1 brócolis picado', 'Milho e ervilha', 'Azeite, sal e páprica']
             },
             {
                 id: 'frango-limao',
                 title: 'Filé de Frango com Molho de Limão',
                 category: 'fit',
                 description: 'Uma opção leve e com um toque de acidez que agrada a maioria das pessoas.',
-                ingredients: ['4 filés de frango', 'Suco de 1 limão', '1 dente de alho', 'Azeite', 'Salsinha picada', 'Sal e pimenta'],
                 prep: [
                     '1. Tempere os filés de frango com sal, pimenta, alho e azeite. Grelhe até dourarem.',
                     '2. Para o molho, misture o suco de limão com um pouco de azeite e sal. Junte a salsinha.',
                     '3. Despeje o molho sobre o frango no momento de servir.'
-                ]
+                ],
+                ingredients: ['4 filés de frango', 'Suco de 1 limão', '1 dente de alho', 'Azeite', 'Salsinha picada', 'Sal e pimenta']
             },
             {
                 id: 'atum-salada',
                 title: 'Salada de Grão de Bico com Atum',
                 category: 'fit',
                 description: 'Uma salada super completa, ideal para os dias mais quentes.',
-                ingredients: ['1 lata de grão de bico', '1 lata de atum em água', 'Cenoura em cubos', 'Tomate picado', 'Pepino em cubos', 'Azeite, limão e sal'],
                 prep: [
                     '1. Lave e escorra o grão de bico e o atum.',
                     '2. Misture todos os ingredientes em uma tigela grande.',
                     '3. Tempere com azeite, limão e sal. Misture bem e sirva gelado.'
-                ]
+                ],
+                ingredients: ['1 lata de grão de bico', '1 lata de atum em água', 'Cenoura em cubos', 'Tomate picado', 'Pepino em cubos', 'Azeite, limão e sal']
             },
             {
                 id: 'frango-legumes',
                 title: 'Frango com Legumes ao Vapor',
                 category: 'fit',
                 description: 'Uma das marmitas mais saudáveis e fáceis de preparar.',
-                ingredients: ['300g de peito de frango em cubos', 'Brócolis', 'Couve-flor', 'Cenoura', 'Vagem', 'Sal, pimenta e azeite'],
                 prep: [
                     '1. Cozinhe o frango no vapor ou grelhado. Tempere com sal e pimenta.',
                     '2. Cozinhe todos os legumes no vapor até ficarem al dente.',
                     '3. Monte a marmita com o frango e os legumes. Regue com um fio de azeite.'
-                ]
+                ],
+                ingredients: ['300g de peito de frango em cubos', 'Brócolis', 'Couve-flor', 'Cenoura', 'Vagem', 'Sal, pimenta e azeite']
             },
             {
                 id: 'carne-molho-fungos',
                 title: 'Carne ao Molho de Funghi',
                 category: 'tradicional',
                 description: 'Um molho sofisticado, que transforma uma carne simples em um prato especial.',
-                ingredients: ['500g de carne em cubos', '20g de funghi secchi', '1 cebola', 'Creme de leite light', 'Sal e pimenta'],
                 prep: [
                     '1. Hidrate o funghi em água morna. Reserve a água.',
                     '2. Doure a carne e adicione a cebola. Junte o funghi picado.',
                     '3. Adicione um pouco da água do funghi para dar sabor. Cozinhe em fogo baixo e, por fim, junte o creme de leite.'
-                ]
+                ],
+                ingredients: ['500g de carne em cubos', '20g de funghi secchi', '1 cebola', 'Creme de leite light', 'Sal e pimenta']
             },
             {
                 id: 'abobrinha-recheada',
                 title: 'Abobrinha Recheada com Carne',
                 category: 'fit',
                 description: 'Uma opção com baixo carboidrato, mas muito saborosa e completa.',
-                ingredients: ['2 abobrinhas grandes', '300g de carne moída', 'Queijo mussarela', 'Molho de tomate', 'Sal e temperos'],
                 prep: [
                     '1. Corte as abobrinhas ao meio e retire o miolo.',
                     '2. Recheie com a carne moída já refogada com o molho de tomate.',
                     '3. Cubra com o queijo e leve para assar até gratinar.'
-                ]
+                ],
+                ingredients: ['2 abobrinhas grandes', '300g de carne moída', 'Queijo mussarela', 'Molho de tomate', 'Sal e temperos']
             },
             {
                 id: 'frango-mostarda',
                 title: 'Frango com Molho de Mostarda e Mel',
                 category: 'tradicional',
                 description: 'Um molho agridoce que deixa o frango com um sabor incrível.',
-                ingredients: ['4 filés de frango', '2 colheres de sopa de mostarda', '1 colher de sopa de mel', 'Sal e pimenta'],
                 prep: [
                     '1. Em uma tigela, misture a mostarda, o mel e a pimenta para fazer o molho.',
                     '2. Grelhe os filés de frango e, quando estiverem quase prontos, cubra com o molho e cozinhe por mais 2 minutos.'
-                ]
+                ],
+                ingredients: ['4 filés de frango', '2 colheres de sopa de mostarda', '1 colher de sopa de mel', 'Sal e pimenta']
             },
             {
                 id: 'quibe-abobora',
                 title: 'Quibe de Abóbora Recheado',
                 category: 'vegano',
                 description: 'Uma opção vegetariana e muito saborosa, que foge do tradicional.',
-                ingredients: ['500g de abóbora cozida', '1/2 xícara de trigo para quibe', 'Hortelã', 'Sal', 'Recheio de legumes ou ricota'],
                 prep: [
-                    '1. Hidrate o trigo para quibe e escorra bem. Misture com a abóbora amassada e a hortelã.',
+                    '1. Hidrate o trigo para quibe e escorra bem. Misture com a abobrinha amassada e a hortelã.',
                     '2. Molde o quibe, recheie e feche.',
                     '3. Leve ao forno para assar até dourar.'
-                ]
+                ],
+                ingredients: ['500g de abóbora cozida', '1/2 xícara de trigo para quibe', 'Hortelã', 'Sal', 'Recheio de legumes ou ricota']
             },
             {
                 id: 'ovo-mexido',
                 title: 'Ovo Mexido com Vegetais',
                 category: 'fit',
                 description: 'Rápido, fácil e versátil. Uma opção para qualquer refeição do dia.',
-                ingredients: ['3 ovos', 'Brócolis picado', 'Cenoura ralada', 'Tomate em cubos', 'Sal e pimenta'],
                 prep: [
                     '1. Em uma frigideira, refogue os vegetais com um pouco de água ou azeite.',
                     '2. Junte os ovos batidos com sal e pimenta.',
                     '3. Mexa constantemente até os ovos ficarem cozidos, mas ainda macios.'
-                ]
+                ],
+                ingredients: ['3 ovos', 'Brócolis picado', 'Cenoura ralada', 'Tomate em cubos', 'Sal e pimenta']
             },
             {
                 id: 'pure-couveflor',
                 title: 'Purê de Couve-Flor com Frango Desfiado',
                 category: 'fit',
                 description: 'Uma opção com baixo carboidrato para quem quer evitar batatas. Super cremoso!',
-                ingredients: ['1 couve-flor grande', '250g de frango desfiado', 'Leite de coco light', 'Queijo parmesão ralado', 'Sal e noz-moscada'],
                 prep: [
                     '1. Cozinhe a couve-flor. Escorra bem e amasse até virar um purê.',
                     '2. Misture o purê de couve-flor com o leite de coco, sal e noz-moscada.',
                     '3. Sirva com o frango desfiado por cima e um pouco de queijo ralado.'
-                ]
+                ],
+                ingredients: ['1 couve-flor grande', '250g de frango desfiado', 'Leite de coco light', 'Queijo parmesão ralado', 'Sal e noz-moscada']
             },
             {
                 id: 'salada-feijao',
                 title: 'Salada de Feijão Fradinho com Vinagrete',
                 category: 'fit',
                 description: 'Uma salada nutritiva, refrescante e cheia de proteínas vegetais.',
-                ingredients: ['2 xícaras de feijão fradinho cozido', '1 cebola roxa picada', 'Tomate picado', 'Pimentão em cubos', 'Salsinha e coentro', 'Vinagre, azeite e sal'],
                 prep: [
                     '1. Misture todos os ingredientes da salada.',
                     '2. Prepare o vinagrete misturando o vinagre, azeite e sal. Despeje sobre a salada e misture bem.'
-                ]
+                ],
+                ingredients: ['2 xícaras de feijão fradinho cozido', '1 cebola roxa picada', 'Tomate picado', 'Pimentão em cubos', 'Salsinha e coentro', 'Vinagre, azeite e sal']
             },
             {
                 id: 'file-peixe-limao',
                 title: 'Filé de Peixe Simples com Limão e Ervas',
                 category: 'fit',
                 description: 'Um prato rápido e muito saudável, perfeito para quem busca refeições leves.',
-                ingredients: ['4 filés de peixe branco', 'Suco de 1 limão', 'Ervas finas (alecrim, manjericão)', 'Azeite, sal e pimenta'],
                 prep: [
                     '1. Tempere os filés com sal, pimenta, azeite, suco de limão e as ervas.',
                     '2. Aqueça uma frigideira antiaderente e grelhe os filés até que estejam bem cozidos e dourados.'
-                ]
+                ],
+                ingredients: ['4 filés de peixe branco', 'Suco de 1 limão', 'Ervas finas (alecrim, manjericão)', 'Azeite, sal e pimenta']
             },
             {
                 id: 'frango-recheado',
                 title: 'Peito de Frango Recheado com Queijo',
                 category: 'tradicional',
                 description: 'Uma marmita que parece sofisticada, mas é fácil de fazer.',
-                ingredients: ['2 peitos de frango grandes', 'Queijo minas ou cottage', 'Manjericão fresco', 'Sal e pimenta'],
                 prep: [
                     '1. Faça um corte lateral nos peitos de frango para criar uma bolsa.',
                     '2. Recheie com o queijo e o manjericão. Feche com palitos.',
                     '3. Grelhe em uma frigideira ou asse no forno até o frango estar cozido e o queijo derretido.'
-                ]
+                ],
+                ingredients: ['2 peitos de frango grandes', 'Queijo minas ou cottage', 'Manjericão fresco', 'Sal e pimenta']
             },
             {
                 id: 'lentilha-frango',
                 title: 'Lentilha Cozida com Frango Desfiado',
                 category: 'tradicional',
                 description: 'Uma marmita completa e nutritiva, rica em proteína e fibra.',
-                ingredients: ['1 xícara de lentilha', '300g de frango desfiado', 'Cebola e alho', 'Cenoura em cubos', 'Sal e cheiro verde'],
                 prep: [
                     '1. Cozinhe a lentilha com a cenoura, cebola e alho até ficar macia.',
                     '2. Junte o frango desfiado, acerte o sal e o cheiro verde.',
                     '3. Sirva como uma sopa mais encorpada ou com um pouco de arroz integral.'
-                ]
+                ],
+                ingredients: ['1 xícara de lentilha', '300g de frango desfiado', 'Cebola e alho', 'Cenoura em cubos', 'Sal e cheiro verde']
             },
             {
                 id: 'carne-legumes-assados',
                 title: 'Carne e Legumes Assados',
                 category: 'tradicional',
                 description: 'Um prato prático que suja pouca louça, perfeito para o dia a dia.',
-                ingredients: ['500g de carne em cubos', 'Batata doce em cubos', 'Cebola roxa em pétalas', 'Brócolis em floretes', 'Azeite, sal, alho e alecrim'],
                 prep: [
                     '1. Misture todos os ingredientes em uma assadeira.',
                     '2. Regue com azeite, tempere com sal, alho e alecrim.',
                     '3. Leve ao forno pré-aquecido a 200°C e asse por cerca de 30-40 minutos, mexendo na metade do tempo.'
-                ]
+                ],
+                ingredients: ['500g de carne em cubos', 'Batata doce em cubos', 'Cebola roxa em pétalas', 'Brócolis em floretes', 'Azeite, sal, alho e alecrim']
             },
             {
                 id: 'couve-flor-molho',
                 title: 'Couve-Flor Gratinada com Frango',
                 category: 'tradicional',
                 description: 'Um prato cremoso e reconfortante, que pode ser feito em grandes quantidades.',
-                ingredients: ['1 couve-flor grande', '400g de frango desfiado', 'Molho branco light (feito com leite e amido de milho)', 'Queijo mussarela ralado'],
                 prep: [
                     '1. Cozinhe a couve-flor. Prepare o molho branco light e misture com o frango desfiado.',
                     '2. Em um refratário, coloque a couve-flor, cubra com a mistura de frango e molho.',
                     '3. Finalize com queijo mussarela ralado e leve ao forno para gratinar.'
-                ]
+                ],
+                ingredients: ['1 couve-flor grande', '400g de frango desfiado', 'Molho branco light (feito com leite e amido de milho)', 'Queijo mussarela ralado']
             },
             {
                 id: 'arroz-lentilha-bolinho',
                 title: 'Bolinho de Arroz com Lentilha',
                 category: 'vegano',
                 description: 'Uma maneira criativa de usar sobras de arroz e lentilha. Delicioso e vegano.',
-                ingredients: ['2 xícaras de arroz cozido', '1 xícara de lentilha cozida', '1/2 cebola', 'Salsinha e cebolinha picada', 'Sal e pimenta'],
                 prep: [
                     '1. Em um recipiente, misture o arroz, a lentilha, a cebola e as ervas.',
                     '2. Amasse bem com as mãos ou um garfo. Molde os bolinhos e coloque-os em uma assadeira untada.',
                     '3. Leve ao forno até dourarem. Sirva com um molho de sua preferência.'
-                ]
+                ],
+                ingredients: ['2 xícaras de arroz cozido', '1 xícara de lentilha cozida', '1/2 cebola', 'Salsinha e cebolinha picada', 'Sal e pimenta']
             },
             {
                 id: 'sopa-cenoura',
                 title: 'Sopa Creme de Cenoura com Gengibre',
                 category: 'tradicional',
                 description: 'Uma sopa com um toque picante e muito nutritiva. Ótima para a imunidade.',
-                ingredients: ['500g de cenoura em cubos', '1 pedaço de gengibre ralado', '1 cebola', '2 dentes de alho', 'Azeite e sal'],
                 prep: [
                     '1. Refogue o alho e a cebola no azeite. Junte a cenoura e refogue.',
                     '2. Cubra com água e cozinhe até a cenoura ficar macia. Junte o gengibre.',
                     '3. Bata tudo no liquidificador até virar um creme. Volte para a panela para aquecer e acerte o sal.'
-                ]
+                ],
+                ingredients: ['500g de cenoura em cubos', '1 pedaço de gengibre ralado', '1 cebola', '2 dentes de alho', 'Azeite e sal']
             },
             {
                 id: 'frango-laranja',
                 title: 'Frango com Molho de Laranja',
                 category: 'tradicional',
                 description: 'Um sabor agridoce que surpreende, perfeito para variar o cardápio da semana.',
-                ingredients: ['4 filés de frango', 'Suco de 2 laranjas', '1 colher de sopa de mel ou adoçante', 'Amido de milho', 'Sal e pimenta'],
                 prep: [
                     '1. Grelhe os filés de frango.',
                     '2. Em uma panela, misture o suco de laranja, o mel e o amido de milho. Cozinhe em fogo baixo, mexendo, até engrossar. Tempere com sal e pimenta.',
                     '3. Cubra os filés de frango com o molho e cozinhe por mais 2 minutos.'
-                ]
+                ],
+                ingredients: ['4 filés de frango', 'Suco de 2 laranjas', '1 colher de sopa de mel ou adoçante', 'Amido de milho', 'Sal e pimenta']
             },
             {
                 id: 'file-peixe-coco',
                 title: 'Filé de Peixe com Leite de Coco e Pimentão',
                 category: 'tradicional',
                 description: 'Um prato com inspiração tailandesa, fácil e com sabor marcante.',
-                ingredients: ['4 filés de peixe', '1 pimentão vermelho', '1 cebola', '1 vidro de leite de coco', 'Sal, pimenta e cheiro verde'],
                 prep: [
                     '1. Refogue a cebola e o pimentão. Adicione os filés de peixe e refogue por 5 minutos.',
                     '2. Junte o leite de coco, acerte o sal e a pimenta e cozinhe por mais 10 minutos.'
-                ]
+                ],
+                ingredients: ['4 filés de peixe', '1 pimentão vermelho', '1 cebola', '1 vidro de leite de coco', 'Sal, pimenta e cheiro verde']
             },
             {
                 id: 'tabule-frango',
                 title: 'Tabule com Frango Desfiado',
                 category: 'fit',
                 description: 'Uma salada refrescante e completa para os dias mais quentes.',
-                ingredients: ['1 xícara de trigo para quibe', '300g de frango desfiado', 'Tomate, pepino e cebola picados', 'Hortelã e salsinha', 'Azeite, limão e sal'],
                 prep: [
                     '1. Hidrate o trigo para quibe. Misture todos os ingredientes picados com o frango desfiado.',
                     '2. Tempere com azeite, suco de limão e sal.'
-                ]
+                ],
+                ingredients: ['1 xícara de trigo para quibe', '300g de frango desfiado', 'Tomate, pepino e cebola picados', 'Hortelã e salsinha', 'Azeite, limão e sal']
             },
             {
                 id: 'couve-refogada-ovos',
                 title: 'Couve Refogada com Ovos',
                 category: 'fit',
                 description: 'Uma combinação simples, nutritiva e muito brasileira.',
-                ingredients: ['1 maço de couve picada', '2 ovos', '1 dente de alho', 'Azeite e sal'],
                 prep: [
                     '1. Em uma panela, refogue o alho no azeite. Adicione a couve e refogue até murchar.',
                     '2. Abra um espaço na panela, quebre os ovos e misture-os com a couve.',
                     '3. Tempere com sal e pimenta.'
-                ]
+                ],
+                ingredients: ['1 maço de couve picada', '2 ovos', '1 dente de alho', 'Azeite e sal']
             },
             {
                 id: 'tortinha-frango',
                 title: 'Tortinha de Frango Integral',
                 category: 'fit',
                 description: 'Perfeito para quem busca uma refeição fácil de transportar e deliciosa.',
-                ingredients: ['Massa de torta integral', 'Recheio de frango desfiado', 'Milho', 'Queijo cottage'],
                 prep: [
                     '1. Forre forminhas de cupcake com a massa. Coloque o recheio de frango misturado com o milho.',
                     '2. Cubra com o queijo cottage e leve ao forno para assar até a massa dourar.'
-                ]
+                ],
+                ingredients: ['Massa de torta integral', 'Recheio de frango desfiado', 'Milho', 'Queijo cottage']
             },
             {
                 id: 'hamburguer-caseiro',
                 title: 'Hambúrguer de Frango Caseiro',
                 category: 'tradicional',
                 description: 'Uma forma saudável de comer hambúrguer. Pode ser feito em grande quantidade e congelado.',
-                ingredients: ['500g de peito de frango moído', '1/2 cebola picada', 'Cheiro verde', 'Sal e temperos a gosto'],
                 prep: [
                     '1. Misture todos os ingredientes.',
                     '2. Molde os hambúrgueres e grelhe em uma frigideira antiaderente.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango moído', '1/2 cebola picada', 'Cheiro verde', 'Sal e temperos a gosto']
             },
             {
                 id: 'strogonoff-classico',
                 title: 'Strogonoff Clássico de Frango',
                 category: 'tradicional',
                 description: 'A versão cremosa e amada por todos, perfeita para marmitas de sucesso.',
-                ingredients: ['500g de peito de frango em cubos', '1 cebola picada', '2 dentes de alho', '2 colheres de sopa de mostarda', '2 colheres de sopa de catchup', '1 caixa de creme de leite', 'Champignon'],
                 prep: [
                     '1. Doure a cebola e o alho em uma panela com um fio de azeite.',
                     '2. Adicione o frango e grelhe até ficar dourado. Tempere com sal e pimenta.',
                     '3. Junte a mostarda e o catchup, misture bem. Adicione o creme de leite e o champignon. Cozinhe por mais 5 minutos em fogo baixo.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango em cubos', '1 cebola picada', '2 dentes de alho', '2 colheres de sopa de mostarda', '2 colheres de sopa de catchup', '1 caixa de creme de leite', 'Champignon']
             },
             {
                 id: 'macarrao-bolonhesa',
                 title: 'Macarrão à Bolonhesa Simples',
                 category: 'tradicional',
                 description: 'Um prato clássico, fácil de preparar e que agrada a todos os paladares.',
-                ingredients: ['500g de carne moída', '1 cebola picada', '2 dentes de alho', '1 molho de tomate', 'Sal e orégano', '500g de macarrão'],
                 prep: [
                     '1. Cozinhe o macarrão e reserve.',
                     '2. Em uma panela, refogue a cebola e o alho. Adicione a carne moída e cozinhe até dourar.',
                     '3. Adicione o molho de tomate, o sal e o orégano. Cozinhe em fogo baixo por 15 minutos.',
                     '4. Sirva o molho por cima do macarrão cozido.'
-                ]
+                ],
+                ingredients: ['500g de carne moída', '1 cebola picada', '2 dentes de alho', '1 molho de tomate', 'Sal e orégano', '500g de macarrão']
             },
             {
                 id: 'escondidinho-mandioquinha',
                 title: 'Escondidinho de Mandioquinha com Carne Seca',
                 category: 'tradicional',
                 description: 'Uma versão deliciosa e reconfortante do clássico escondidinho.',
-                ingredients: ['500g de carne seca desfiada', '1kg de mandioquinha', '1 cebola', '2 dentes de alho', 'Queijo mussarela ralado', 'Sal e pimenta'],
                 prep: [
                     '1. Cozinhe a mandioquinha até ficar macia e amasse para fazer um purê. Reserve.',
                     '2. Refogue o alho e a cebola, adicione a carne seca desfiada e misture bem.',
                     '3. Em um refratário, coloque a carne seca, cubra com o purê e finalize com o queijo.',
                     '4. Asse até gratinar.'
-                ]
+                ],
+                ingredients: ['500g de carne seca desfiada', '1kg de mandioquinha', '1 cebola', '2 dentes de alho', 'Queijo mussarela ralado', 'Sal e pimenta']
             },
             {
                 id: 'feijoada',
                 title: 'Feijoada Completa para Marmita',
                 category: 'tradicional',
                 description: 'Feijoada caseira perfeita para porcionar e vender. Um clássico da culinária brasileira.',
-                ingredients: ['500g de feijão preto', '150g de carne seca', '100g de costelinha defumada', '100g de linguiça calabresa', 'Couve refogada', 'Arroz e farofa'],
                 prep: [
                     '1. Deixe o feijão e a carne seca de molho. Cozinhe o feijão com as carnes até ficarem macios.',
                     '2. Em outra panela, refogue o alho e a cebola, junte o feijão e as carnes e deixe apurar o sabor.',
                     '3. Monte a marmita com o feijão, arroz, couve refogada e farofa.'
-                ]
+                ],
+                ingredients: ['500g de feijão preto', '150g de carne seca', '100g de costelinha defumada', '100g de linguiça calabresa', 'Couve refogada', 'Arroz e farofa']
             },
             {
                 id: 'yakisoba',
                 title: 'Yakisoba de Frango Caseiro',
                 category: 'tradicional',
                 description: 'Prato com inspiração oriental, rápido e versátil.',
-                ingredients: ['300g de macarrão para yakisoba', '300g de peito de frango em tiras', 'Brócolis', 'Cenoura', 'Pimentão', 'Molho shoyu e óleo de gergelim'],
                 prep: [
                     '1. Cozinhe o macarrão.',
                     '2. Grelhe o frango. Adicione os vegetais e refogue por 5 minutos.',
                     '3. Junte o macarrão cozido, o molho shoyu e o óleo de gergelim. Misture bem e sirva.'
-                ]
+                ],
+                ingredients: ['300g de macarrão para yakisoba', '300g de peito de frango em tiras', 'Brócolis', 'Cenoura', 'Pimentão', 'Molho shoyu e óleo de gergelim']
             },
             {
                 id: 'risoto-cremoso',
                 title: 'Risoto de Frango Cremoso',
                 category: 'tradicional',
                 description: 'Um risoto simples e cremoso, com sabor caseiro e irresistível.',
-                ingredients: ['1 xícara de arroz arbóreo', '1/2 cebola picada', '200g de frango desfiado', '1/2 xícara de vinho branco', 'Caldo de legumes', 'Queijo parmesão ralado'],
                 prep: [
                     '1. Refogue a cebola. Adicione o arroz e o vinho e misture até secar.',
                     '2. Adicione o caldo de legumes aos poucos, mexendo sempre, até o arroz cozinhar. Junte o frango desfiado e o queijo.',
                     '3. Sirva em seguida.'
-                ]
+                ],
+                ingredients: ['1 xícara de arroz arbóreo', '1/2 cebola picada', '200g de frango desfiado', '1/2 xícara de vinho branco', 'Caldo de legumes', 'Queijo parmesão ralado']
             },
             {
                 id: 'bife-acebolado',
                 title: 'Bife Acebolado com Purê de Batata',
                 category: 'tradicional',
                 description: 'O clássico bife com cebola, perfeito para a sua marmita.',
-                ingredients: ['4 bifes de patinho', '2 cebolas em rodelas', '1kg de batata', 'Leite e manteiga', 'Sal e pimenta'],
                 prep: [
                     '1. Cozinhe a batata, amasse e faça o purê. Reserve.',
                     '2. Tempere os bifes. Grelhe em uma frigideira. Reserve os bifes.',
                     '3. Na mesma frigideira, refogue as cebolas até caramelizar. Cubra os bifes com as cebolas e sirva com o purê.'
-                ]
+                ],
+                ingredients: ['4 bifes de patinho', '2 cebolas em rodelas', '1kg de batata', 'Leite e manteiga', 'Sal e pimenta']
             },
             {
                 id: 'frango-catupiry',
                 title: 'Frango com Catupiry',
                 category: 'tradicional',
                 description: 'A combinação que todo mundo ama, agora na sua marmita.',
-                ingredients: ['500g de peito de frango desfiado', '1 pote de requeijão ou catupiry', 'Milho', 'Queijo mussarela'],
                 prep: [
                     '1. Refogue o frango desfiado. Misture com o requeijão ou catupiry e o milho.',
                     '2. Leve para gratinar no forno com o queijo mussarela por cima.'
-                ]
+                ],
+                ingredients: ['500g de peito de frango desfiado', '1 pote de requeijão ou catupiry', 'Milho', 'Queijo mussarela']
             }
         ];
 
@@ -1019,16 +1171,18 @@
             recipeGrid.innerHTML = '';
             filteredRecipes.forEach(recipe => {
                 const card = document.createElement('div');
-                card.className = 'bg-emerald-600 p-6 rounded-lg shadow recipe-card cursor-pointer';
+                card.className = 'bg-white rounded-lg shadow recipe-card cursor-pointer';
                 card.innerHTML = `
-                    <h5 class="font-bold text-lg text-white">${recipe.title}</h5>
-                    <p class="text-white mt-2">${recipe.description}</p>
+                    <div class="p-6">
+                        <h5 class="font-bold text-lg text-emerald-600">${recipe.title}</h5>
+                        <p class="text-stone-600 mt-2">${recipe.description}</p>
+                    </div>
                 `;
                 card.addEventListener('click', () => showRecipeDetails(recipe));
                 recipeGrid.appendChild(card);
             });
         }
-        
+
         function filterRecipes(category) {
             const filtered = category === 'all' ? recipes : recipes.filter(r => r.category === category);
             renderRecipes(filtered);
@@ -1164,7 +1318,11 @@
             setTimeout(() => {
                 confetti.reset();
             }, 5000);
+            
+            showTestimonial(0);
+            testimonialInterval = setInterval(nextTestimonial, 5000);
         });
     </script>
 </body>
 </html>
+```````````````
